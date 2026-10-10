@@ -1,0 +1,6 @@
+{
+  "active_before": 2,
+  "restored_version": 1,
+  "passed": true,
+  "scope": "isolated deterministic proof database; no production change"
+}

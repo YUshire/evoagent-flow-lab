@@ -1,0 +1,584 @@
+{
+  "all_cases": {
+    "baseline": {
+      "case_results": [
+        {
+          "error": null,
+          "findings": 1,
+          "fn": 0,
+          "fp": 0,
+          "id": 1,
+          "name": "proof-validation-1",
+          "severity_hits": 1,
+          "tp": 1
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 1,
+          "fp": 0,
+          "id": 2,
+          "name": "proof-validation-2",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 1,
+          "fp": 0,
+          "id": 3,
+          "name": "proof-validation-3",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 4,
+          "name": "proof-validation-4",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 5,
+          "name": "proof-validation-5",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 6,
+          "name": "proof-validation-6",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 1,
+          "fn": 0,
+          "fp": 0,
+          "id": 7,
+          "name": "proof-holdout-1",
+          "severity_hits": 1,
+          "tp": 1
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 1,
+          "fp": 0,
+          "id": 8,
+          "name": "proof-holdout-2",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 1,
+          "fp": 0,
+          "id": 9,
+          "name": "proof-holdout-3",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 10,
+          "name": "proof-holdout-4",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 11,
+          "name": "proof-holdout-5",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 12,
+          "name": "proof-holdout-6",
+          "severity_hits": 0,
+          "tp": 0
+        }
+      ],
+      "cases": 12,
+      "clean_accuracy": 1.0,
+      "clean_cases": 6,
+      "errors": [],
+      "expected_findings": 6,
+      "f1": 0.5,
+      "high_severity_recall": 0.5,
+      "positive_cases": 6,
+      "precision": 1.0,
+      "predicted_findings": 2,
+      "recall": 0.3333,
+      "reviewer": "prompt-policy-reviewer",
+      "schema_version": 2,
+      "score": 0.675,
+      "severity_accuracy": 1.0,
+      "success_rate": 1.0,
+      "successful_cases": 12
+    },
+    "candidate": {
+      "case_results": [
+        {
+          "error": null,
+          "findings": 1,
+          "fn": 0,
+          "fp": 0,
+          "id": 1,
+          "name": "proof-validation-1",
+          "severity_hits": 1,
+          "tp": 1
+        },
+        {
+          "error": null,
+          "findings": 1,
+          "fn": 0,
+          "fp": 0,
+          "id": 2,
+          "name": "proof-validation-2",
+          "severity_hits": 1,
+          "tp": 1
+        },
+        {
+          "error": null,
+          "findings": 1,
+          "fn": 0,
+          "fp": 0,
+          "id": 3,
+          "name": "proof-validation-3",
+          "severity_hits": 1,
+          "tp": 1
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 4,
+          "name": "proof-validation-4",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 5,
+          "name": "proof-validation-5",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 6,
+          "name": "proof-validation-6",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 1,
+          "fn": 0,
+          "fp": 0,
+          "id": 7,
+          "name": "proof-holdout-1",
+          "severity_hits": 1,
+          "tp": 1
+        },
+        {
+          "error": null,
+          "findings": 1,
+          "fn": 0,
+          "fp": 0,
+          "id": 8,
+          "name": "proof-holdout-2",
+          "severity_hits": 1,
+          "tp": 1
+        },
+        {
+          "error": null,
+          "findings": 1,
+          "fn": 0,
+          "fp": 0,
+          "id": 9,
+          "name": "proof-holdout-3",
+          "severity_hits": 1,
+          "tp": 1
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 10,
+          "name": "proof-holdout-4",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 11,
+          "name": "proof-holdout-5",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 12,
+          "name": "proof-holdout-6",
+          "severity_hits": 0,
+          "tp": 0
+        }
+      ],
+      "cases": 12,
+      "clean_accuracy": 1.0,
+      "clean_cases": 6,
+      "errors": [],
+      "expected_findings": 6,
+      "f1": 1.0,
+      "high_severity_recall": 1.0,
+      "positive_cases": 6,
+      "precision": 1.0,
+      "predicted_findings": 6,
+      "recall": 1.0,
+      "reviewer": "prompt-policy-reviewer",
+      "schema_version": 2,
+      "score": 1.0,
+      "severity_accuracy": 1.0,
+      "success_rate": 1.0,
+      "successful_cases": 12
+    },
+    "delta": {
+      "clean_accuracy": 0.0,
+      "f1": 0.5,
+      "high_severity_recall": 0.5,
+      "precision": 0.0,
+      "recall": 0.6667,
+      "score": 0.325,
+      "severity_accuracy": 0.0,
+      "success_rate": 0.0
+    }
+  },
+  "claim_scope": {
+    "does_not_prove": "External LLM weight improvement or production performance on real GitHub PRs.",
+    "level": "controlled-offline-behavioral-evolution",
+    "proves": "Feedback automatically produced a new prompt version; the same reviewer changed behavior and passed validation improvement plus holdout non-regression."
+  },
+  "dataset": {
+    "cases": 12,
+    "holdout_cases": 6,
+    "holdout_sha256": "dea2d2db3a54441022ff6eb92cdfe4c5e997c778eb8e3e8a833f899ceb108c66",
+    "path": "C:\\Users\\Yushire\\Documents\\Codex\\2026-10-10\\https-rcn7f86azrf6-feishu-cn-wiki-rxyvwmhbsil9dwkj4b5cb8i1ngh\\outputs\\GitHub完整流程\\controlled-activation\\cases.jsonl",
+    "repositories": 2,
+    "sha256": "139a45f9ea92a969f54b59a232ae9a5b33f8b0bff8dc7c5201958355b60109c2",
+    "source_kinds": [
+      "new-authored-controlled"
+    ],
+    "validation_cases": 6,
+    "validation_sha256": "214be5e2db47b0b2d906b75582c61aec7f74d374456167e89cc582c4bae1cbe8"
+  },
+  "evolution_run": {
+    "decision": "activated",
+    "failure_cases_used": 2,
+    "gates": {
+      "evaluation_success": true,
+      "holdout_dataset_ready": true,
+      "holdout_non_regression": true,
+      "safety": true,
+      "validation_dataset_ready": true,
+      "validation_improvement": true,
+      "validation_non_regression": true
+    },
+    "reason": "candidate improved on validation and passed the non-regression holdout gate",
+    "run_id": "e1f84b3a-35e3-4ce9-a68b-f526320d0bb3"
+  },
+  "feedback": {
+    "learned_rule_ids": [
+      "SEC-ASSERT-AUTH",
+      "SEC-YAML-LOAD"
+    ],
+    "missed_findings": 2,
+    "resolved_after_activation": 2
+  },
+  "generated_at": "2026-10-10T06:07:30.894061+00:00",
+  "holdout": {
+    "baseline": {
+      "cases": 6,
+      "clean_accuracy": 1.0,
+      "clean_cases": 3,
+      "error_count": 0,
+      "expected_findings": 3,
+      "f1": 0.5,
+      "high_severity_recall": 0.5,
+      "positive_cases": 3,
+      "precision": 1.0,
+      "predicted_findings": 1,
+      "recall": 0.3333,
+      "reviewer": "prompt-policy-reviewer",
+      "schema_version": 2,
+      "score": 0.675,
+      "severity_accuracy": 1.0,
+      "success_rate": 1.0,
+      "successful_cases": 6
+    },
+    "candidate": {
+      "cases": 6,
+      "clean_accuracy": 1.0,
+      "clean_cases": 3,
+      "error_count": 0,
+      "expected_findings": 3,
+      "f1": 1.0,
+      "high_severity_recall": 1.0,
+      "positive_cases": 3,
+      "precision": 1.0,
+      "predicted_findings": 3,
+      "recall": 1.0,
+      "reviewer": "prompt-policy-reviewer",
+      "schema_version": 2,
+      "score": 1.0,
+      "severity_accuracy": 1.0,
+      "success_rate": 1.0,
+      "successful_cases": 6
+    },
+    "delta": {
+      "clean_accuracy": 0.0,
+      "f1": 0.5,
+      "high_severity_recall": 0.5,
+      "precision": 0.0,
+      "recall": 0.6667,
+      "score": 0.325,
+      "severity_accuracy": 0.0,
+      "success_rate": 0.0
+    }
+  },
+  "release_gate": {
+    "production_activation_allowed": false,
+    "production_data_provenance_passed": false,
+    "quantitative_passed": true
+  },
+  "schema_version": 1,
+  "validation": {
+    "baseline": {
+      "case_results": [
+        {
+          "error": null,
+          "findings": 1,
+          "fn": 0,
+          "fp": 0,
+          "id": 1,
+          "name": "proof-validation-1",
+          "severity_hits": 1,
+          "tp": 1
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 1,
+          "fp": 0,
+          "id": 2,
+          "name": "proof-validation-2",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 1,
+          "fp": 0,
+          "id": 3,
+          "name": "proof-validation-3",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 4,
+          "name": "proof-validation-4",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 5,
+          "name": "proof-validation-5",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 6,
+          "name": "proof-validation-6",
+          "severity_hits": 0,
+          "tp": 0
+        }
+      ],
+      "cases": 6,
+      "clean_accuracy": 1.0,
+      "clean_cases": 3,
+      "errors": [],
+      "expected_findings": 3,
+      "f1": 0.5,
+      "high_severity_recall": 0.5,
+      "positive_cases": 3,
+      "precision": 1.0,
+      "predicted_findings": 1,
+      "recall": 0.3333,
+      "reviewer": "prompt-policy-reviewer",
+      "schema_version": 2,
+      "score": 0.675,
+      "severity_accuracy": 1.0,
+      "success_rate": 1.0,
+      "successful_cases": 6
+    },
+    "candidate": {
+      "case_results": [
+        {
+          "error": null,
+          "findings": 1,
+          "fn": 0,
+          "fp": 0,
+          "id": 1,
+          "name": "proof-validation-1",
+          "severity_hits": 1,
+          "tp": 1
+        },
+        {
+          "error": null,
+          "findings": 1,
+          "fn": 0,
+          "fp": 0,
+          "id": 2,
+          "name": "proof-validation-2",
+          "severity_hits": 1,
+          "tp": 1
+        },
+        {
+          "error": null,
+          "findings": 1,
+          "fn": 0,
+          "fp": 0,
+          "id": 3,
+          "name": "proof-validation-3",
+          "severity_hits": 1,
+          "tp": 1
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 4,
+          "name": "proof-validation-4",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 5,
+          "name": "proof-validation-5",
+          "severity_hits": 0,
+          "tp": 0
+        },
+        {
+          "error": null,
+          "findings": 0,
+          "fn": 0,
+          "fp": 0,
+          "id": 6,
+          "name": "proof-validation-6",
+          "severity_hits": 0,
+          "tp": 0
+        }
+      ],
+      "cases": 6,
+      "clean_accuracy": 1.0,
+      "clean_cases": 3,
+      "errors": [],
+      "expected_findings": 3,
+      "f1": 1.0,
+      "high_severity_recall": 1.0,
+      "positive_cases": 3,
+      "precision": 1.0,
+      "predicted_findings": 3,
+      "recall": 1.0,
+      "reviewer": "prompt-policy-reviewer",
+      "schema_version": 2,
+      "score": 1.0,
+      "severity_accuracy": 1.0,
+      "success_rate": 1.0,
+      "successful_cases": 6
+    },
+    "delta": {
+      "clean_accuracy": 0.0,
+      "f1": 0.5,
+      "high_severity_recall": 0.5,
+      "precision": 0.0,
+      "recall": 0.6667,
+      "score": 0.325,
+      "severity_accuracy": 0.0,
+      "success_rate": 0.0
+    }
+  },
+  "versions": [
+    {
+      "active": false,
+      "parent_version": null,
+      "prompt_sha256": "7744079c9edf276b4855958d232aff16e93c6623d8d3812a49b8ddcfb209eceb",
+      "score": 0.675,
+      "version": 1
+    },
+    {
+      "active": true,
+      "parent_version": 1,
+      "prompt_sha256": "a105ec40e0427f7086e4b145100351aa71af8c329229f45ddcd6145c6c42f55b",
+      "score": 1.0,
+      "version": 2
+    }
+  ]
+}

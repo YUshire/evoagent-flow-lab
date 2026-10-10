@@ -1,0 +1,386 @@
+{
+  "version": {
+    "skill_name": "llm-review",
+    "version": 1,
+    "score": 0.8071,
+    "active": false
+  },
+  "decision": "rejected",
+  "reason": "score improvement was below the configured threshold",
+  "candidate": {
+    "schema_version": 2,
+    "reviewer": "deepseek:deepseek-v4-flash",
+    "score": 0.8071,
+    "precision": 0.75,
+    "recall": 1.0,
+    "f1": 0.8571,
+    "severity_accuracy": 1.0,
+    "high_severity_recall": 1.0,
+    "clean_accuracy": 0.5,
+    "cases": 5,
+    "positive_cases": 3,
+    "clean_cases": 2,
+    "expected_findings": 3,
+    "predicted_findings": 4,
+    "successful_cases": 5,
+    "success_rate": 1.0,
+    "errors": [],
+    "case_results": [
+      {
+        "id": 1,
+        "name": "security-dynamic-execution",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "findings": 1,
+        "severity_hits": 1,
+        "error": null
+      },
+      {
+        "id": 2,
+        "name": "security-hardcoded-secret",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "findings": 1,
+        "severity_hits": 1,
+        "error": null
+      },
+      {
+        "id": 3,
+        "name": "reliability-swallowed-error",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "findings": 1,
+        "severity_hits": 1,
+        "error": null
+      },
+      {
+        "id": 4,
+        "name": "clean-parameterized-query",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 5,
+        "name": "clean-input-validation",
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "findings": 1,
+        "severity_hits": 0,
+        "error": null
+      }
+    ]
+  },
+  "baseline": {
+    "schema_version": 2,
+    "reviewer": "deepseek:deepseek-v4-flash",
+    "score": 0.8071,
+    "precision": 0.75,
+    "recall": 1.0,
+    "f1": 0.8571,
+    "severity_accuracy": 1.0,
+    "high_severity_recall": 1.0,
+    "clean_accuracy": 0.5,
+    "cases": 5,
+    "positive_cases": 3,
+    "clean_cases": 2,
+    "expected_findings": 3,
+    "predicted_findings": 4,
+    "successful_cases": 5,
+    "success_rate": 1.0,
+    "errors": [],
+    "case_results": [
+      {
+        "id": 1,
+        "name": "security-dynamic-execution",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "findings": 1,
+        "severity_hits": 1,
+        "error": null
+      },
+      {
+        "id": 2,
+        "name": "security-hardcoded-secret",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "findings": 1,
+        "severity_hits": 1,
+        "error": null
+      },
+      {
+        "id": 3,
+        "name": "reliability-swallowed-error",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "findings": 1,
+        "severity_hits": 1,
+        "error": null
+      },
+      {
+        "id": 4,
+        "name": "clean-parameterized-query",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 5,
+        "name": "clean-input-validation",
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "findings": 1,
+        "severity_hits": 0,
+        "error": null
+      }
+    ]
+  },
+  "candidate_holdout": {
+    "schema_version": 2,
+    "reviewer": "deepseek:deepseek-v4-flash",
+    "score": 0.5833,
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1": 0.6667,
+    "severity_accuracy": 1.0,
+    "high_severity_recall": 1.0,
+    "clean_accuracy": 0.0,
+    "cases": 2,
+    "positive_cases": 1,
+    "clean_cases": 1,
+    "expected_findings": 1,
+    "predicted_findings": 2,
+    "successful_cases": 2,
+    "success_rate": 1.0,
+    "error_count": 0
+  },
+  "baseline_holdout": {
+    "schema_version": 2,
+    "reviewer": "deepseek:deepseek-v4-flash",
+    "score": 0.5833,
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1": 0.6667,
+    "severity_accuracy": 1.0,
+    "high_severity_recall": 1.0,
+    "clean_accuracy": 0.0,
+    "cases": 2,
+    "positive_cases": 1,
+    "clean_cases": 1,
+    "expected_findings": 1,
+    "predicted_findings": 2,
+    "successful_cases": 2,
+    "success_rate": 1.0,
+    "error_count": 0
+  },
+  "safety": {
+    "safety_passed": true,
+    "completeness": 1.0,
+    "missing_terms": []
+  },
+  "gates": {
+    "safety": true,
+    "validation_dataset_ready": true,
+    "holdout_dataset_ready": true,
+    "evaluation_success": true,
+    "validation_improvement": false,
+    "validation_non_regression": true,
+    "holdout_non_regression": true
+  },
+  "run_id": "839b37a1-7e45-4dfe-ba1d-650defd04b02",
+  "candidate_change": {
+    "candidate_prompt": "Review the unified diff. Return JSON findings with severity, fix and test. Report only actionable defects introduced by added lines.\n\nValidated evolution constraints:\n- If the review pipeline cannot produce a finding object, emit an explicit execution_error finding with severity, the failing stage, and the raw error text instead of returning null.\n- For any critical severity finding, require at least two independent evidence sources (e.g., a local-rule scanner hit plus a data-flow or AST confirmation) before marking the gate as passed.\n- When a finding's confidence is below 0.9, state the specific uncertainty and what additional evidence would raise confidence.\n- Do not treat synthetic or integration-check notes as production feedback; label them as non-production in the output.",
+    "candidate": {
+      "prompt_additions": [
+        "If the review pipeline cannot produce a finding object, emit an explicit execution_error finding with severity, the failing stage, and the raw error text instead of returning null.",
+        "For any critical severity finding, require at least two independent evidence sources (e.g., a local-rule scanner hit plus a data-flow or AST confirmation) before marking the gate as passed.",
+        "When a finding's confidence is below 0.9, state the specific uncertainty and what additional evidence would raise confidence.",
+        "Do not treat synthetic or integration-check notes as production feedback; label them as non-production in the output."
+      ],
+      "few_shot_examples": [
+        {
+          "input": "Review the unified diff. Return JSON findings with severity, fix and test. Report only actionable defects introduced by added lines.",
+          "output": "{\"findings\":[{\"rule_id\":\"SEC-EVAL\",\"severity\":\"critical\",\"title\":\"Arbitrary code execution via eval() on untrusted request input\",\"path\":\"app.py\",\"line\":2,\"evidence\":\"return eval(request[\\\"value\\\"])\",\"fix\":\"Remove eval(); use an explicit allowlist or json.loads for structured data.\",\"test\":\"Call parse_request with {\\\"value\\\": \\\"__import__('os').system('id')\\\"} and assert rejection with no code execution.\",\"confidence\":0.85,\"source\":\"security\",\"gate\":{\"passed\":true,\"reasons\":[],\"exact_location_evidence\":true,\"strong_evidence_count\":2}}]}"
+        },
+        {
+          "input": "Review the unified diff. Return JSON findings with severity, fix and test. Report only actionable defects introduced by added lines.",
+          "output": "{\"findings\":[],\"execution_error\":{\"stage\":\"review\",\"message\":\"pipeline terminated before producing findings\",\"task_id\":\"87ed5d93-6681-427b-9eaa-31464c40655d\"}}"
+        }
+      ],
+      "lead_delegation_rules": [
+        {
+          "when": "The diff touches a network-boundary file or any file marked as handling untrusted input",
+          "delegate_to": [
+            "security"
+          ]
+        },
+        {
+          "when": "A critical finding is proposed with fewer than two independent evidence sources",
+          "delegate_to": [
+            "critic"
+          ]
+        },
+        {
+          "when": "The review pipeline returns null findings or an execution error",
+          "delegate_to": [
+            "correctness-reliability"
+          ]
+        }
+      ],
+      "tool_selection_policy": [
+        {
+          "hypothesis": "A critical security finding needs corroboration beyond a single scanner hit",
+          "preferred_tools": [
+            "symbol",
+            "dataflow"
+          ]
+        },
+        {
+          "hypothesis": "An execution error with no finding indicates a pipeline or schema failure rather than a code defect",
+          "preferred_tools": [
+            "symbol"
+          ]
+        }
+      ],
+      "budget_parameters": {
+        "lead": 1000,
+        "security": 3000,
+        "correctness-reliability": 3000,
+        "critic": 2000
+      }
+    },
+    "clusters": [
+      {
+        "name": "execution_errors_no_finding",
+        "failure_case_ids": [
+          1,
+          2,
+          3
+        ],
+        "root_cause": "The review pipeline terminated with an execution error before producing any finding object, so no severity, fix, or test was emitted. Because the failure is infrastructural rather than analytical, the same task_id (87ed5d93) recurs across three cases, indicating a single run that failed repeatedly or was retried without a successful completion. Likely contributors are tool invocation failures, malformed model output that failed schema validation, or budget exhaustion during the review loop."
+      },
+      {
+        "name": "accepted_security_finding_quality",
+        "failure_case_ids": [
+          4
+        ],
+        "root_cause": "The SEC-EVAL finding was accepted and is a true positive, but the evidence is synthetic and the gate reports strong_evidence_count of 0 despite exact_location_evidence being true. The finding relies on a single local-rule scanner hit plus AST confirmation rather than independent corroboration, and the confidence of 0.85 sits just below a typical high-confidence threshold. This is not a false positive, but it shows the security path can pass a critical finding with weak corroboration, which risks both over-trust in synthetic cases and under-verification in real ones."
+      }
+    ],
+    "rationale": "Cases 1-3 share one task_id and all failed with execution_error and null findings, so they cluster as a single pipeline failure rather than three independent analytical misses; the fix is to require an explicit execution_error finding instead of null. Case 4 is an accepted true-positive security finding, so it is not a false positive; its weakness is that a critical finding passed the gate with strong_evidence_count of 0 and confidence just under 0.9, which motivates the two-source corroboration rule and the critic delegation. The proposed changes are limited to prompt, delegation, tool-selection, and budget configuration and contain no production source-code edits.",
+    "change_diff": "--- active-prompt\n+++ candidate-prompt\n@@ -1 +1,7 @@\n-Review the unified diff. Return JSON findings with severity, fix and test. Report only actionable defects introduced by added lines.+Review the unified diff. Return JSON findings with severity, fix and test. Report only actionable defects introduced by added lines.\n+\n+Validated evolution constraints:\n+- If the review pipeline cannot produce a finding object, emit an explicit execution_error finding with severity, the failing stage, and the raw error text instead of returning null.\n+- For any critical severity finding, require at least two independent evidence sources (e.g., a local-rule scanner hit plus a data-flow or AST confirmation) before marking the gate as passed.\n+- When a finding's confidence is below 0.9, state the specific uncertainty and what additional evidence would raise confidence.\n+- Do not treat synthetic or integration-check notes as production feedback; label them as non-production in the output.",
+    "generation": {
+      "mode": "evolution-candidate",
+      "llm_calls": 1,
+      "tool_calls": 0,
+      "input_tokens": 1015,
+      "output_tokens": 1008,
+      "total_tokens": 2023,
+      "cost_usd": 0.0,
+      "duration_ms": 5797,
+      "failed_model_calls": 0,
+      "failed_tool_calls": 0,
+      "model_call_log": [
+        {
+          "role": "evolution-root-cause",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "input_tokens": 1015,
+          "output_tokens": 1008,
+          "cost_usd": 0.0,
+          "duration_ms": 5797,
+          "ok": true,
+          "error": ""
+        }
+      ],
+      "tool_call_log": [],
+      "agent_traces": {}
+    },
+    "generator": {
+      "provider": "deepseek",
+      "model": "deepseek-v4-flash"
+    },
+    "failure_cases": [
+      {
+        "id": 4,
+        "category": "accepted",
+        "finding": {
+          "rule_id": "SEC-EVAL",
+          "severity": "critical",
+          "title": "Arbitrary code execution via eval() on untrusted request input in parse_request",
+          "explanation": "The new function parse_request takes a request object and passes request[\"value\"] directly into eval(). The diff context marks app.py as a network-boundary file, so request[\"value\"] is attacker-controllable input arriving across a network trust boundary. There is no validation, normalization, allowlist, or sandboxing between the source (request[\"value\"]) and the sensitive sink (eval). An attacker who can supply the request value can execute arbitrary Python expressions in the server process, leading to remote code execution, data disclosure, and full host compromise. The local-rule scanner independently flagged this call site as critical (SEC-EVAL) and the diff AST confirms a valid Call node at app.py line 2.",
+          "path": "app.py",
+          "line": 2,
+          "evidence": "return eval(request[\"value\"])",
+          "fix": "Remove eval() entirely. Replace it with an explicit parser or a strict allowlist/command map, e.g. parse the value with json.loads for structured data, or map an expected key to a fixed handler: HANDLERS = {\"sum\": lambda v: sum(v)}; return HANDLERS[request[\"value\"]](...). If expression evaluation is genuinely required, use a restricted evaluator such as ast.literal_eval for literals only, and never pass raw request data to eval/exec.",
+          "test": "Add a regression test that calls parse_request with a malicious payload such as {\"value\": \"__import__('os').system('id')\"} and asserts it is rejected (raises/returns an error) and that no code executes, while a legitimate allowlisted input still returns the expected result.",
+          "confidence": 0.8499999999999999,
+          "evidence_refs": [],
+          "call_chain": [
+            {
+              "path": "app.py",
+              "line": 1,
+              "symbol": "parse_request"
+            },
+            {
+              "path": "app.py",
+              "line": 2,
+              "symbol": "eval"
+            }
+          ],
+          "source": "security",
+          "gate": {
+            "passed": true,
+            "reasons": [],
+            "exact_location_evidence": true,
+            "strong_evidence_count": 0
+          },
+          "cwe": "CWE-95"
+        },
+        "note": "Synthetic integration check: review completed; not production feedback.",
+        "task_id": "7af5699f-48d3-496f-8d5f-4f63972deda5"
+      },
+      {
+        "id": 3,
+        "category": "execution_error",
+        "finding": null,
+        "note": "",
+        "task_id": "87ed5d93-6681-427b-9eaa-31464c40655d"
+      },
+      {
+        "id": 2,
+        "category": "execution_error",
+        "finding": null,
+        "note": "",
+        "task_id": "87ed5d93-6681-427b-9eaa-31464c40655d"
+      },
+      {
+        "id": 1,
+        "category": "execution_error",
+        "finding": null,
+        "note": "",
+        "task_id": "87ed5d93-6681-427b-9eaa-31464c40655d"
+      }
+    ]
+  },
+  "failure_cases_used": 4,
+  "rollback_point": null,
+  "evaluation_data": {
+    "validation_sha256": "c2a86637cc80caa3553b43103da786fd608e87006c006a5c7c8dd114bbfe821a",
+    "holdout_sha256": "7987b28629337ee3dec600c492beb9599ca63354f02b07966e5f12df956a3451"
+  }
+}

@@ -31,11 +31,17 @@ class JsonChatClient:
             "model": self.model,
             "temperature": 0,
             "messages": [
-                {"role": "system", "content": system},
+                {"role": "system", "content": system + (
+                    "\nOutput exactly one JSON object matching the requested protocol. "
+                    "Put protocol fields directly at the root. Do not wrap the result "
+                    "in a type/content envelope or Markdown, and do not append commentary."
+                )},
                 {"role": "user", "content": user},
             ],
             "response_format": {"type": "json_object"},
         }
+        if self.provider == "deepseek":
+            payload["thinking"] = {"type": "disabled"}
         if max_tokens:
             payload["max_tokens"] = int(max_tokens)
         headers = {
@@ -53,7 +59,10 @@ class JsonChatClient:
         try:
             with urllib.request.urlopen(request, timeout=self.timeout) as response:
                 body = json.loads(response.read().decode("utf-8"))
-            content = body["choices"][0]["message"]["content"]
+            choice = body["choices"][0]
+            if choice.get("finish_reason") == "length":
+                raise ValueError("model JSON was truncated by its output token limit")
+            content = choice["message"]["content"]
             result = json.loads(content)
             if not isinstance(result, dict):
                 raise ValueError("model JSON root is not an object")

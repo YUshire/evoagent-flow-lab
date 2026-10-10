@@ -484,7 +484,26 @@ class EvolutionEngine:
     def auto_propose(
         self, skill_name: str = "llm-review", tenant_id: Optional[str] = None,
     ) -> Dict[str, Any]:
-        cases = self.store.list_failure_cases(True, 100, tenant_id)
+        # Accepted reviews are positive evidence, not a failure to optimize against.
+        # Queue retries may record the same failure repeatedly; use one signal.
+        raw_cases = self.store.list_failure_cases(True, 500, tenant_id)
+        cases = []
+        seen = set()
+        for case in raw_cases:
+            if case.get("category") not in {
+                "false_positive", "missed_issue", "bad_fix", "execution_error",
+            }:
+                continue
+            identity = (
+                case.get("task_id"), case.get("category"),
+                json.dumps((case.get("payload") or {}).get("finding"), sort_keys=True),
+            )
+            if identity in seen:
+                continue
+            seen.add(identity)
+            cases.append(case)
+            if len(cases) == 100:
+                break
         active = self.store.get_active_skill_version(skill_name)
         base = active["prompt"] if active else DEFAULT_PROMPT
         if self.candidate_generator is not None and cases:

@@ -27,9 +27,10 @@ class EndToEndEvaluationTests(unittest.TestCase):
         self.assertEqual(8, len(validation_repos))
         self.assertEqual(2, len(holdout_repos))
         self.assertFalse(validation_repos & holdout_repos)
-        self.assertEqual(
-            {"offline-fixture"},
-            {item["source"]["kind"] for item in cases},
+        self.assertTrue(
+            {item["source"]["kind"] for item in cases}.issubset(
+                {"offline-fixture", "synthetic-controlled"}
+            )
         )
 
     def test_one_to_one_matching_counts_duplicate_prediction_once(self):

@@ -3,6 +3,7 @@ import tempfile
 import unittest
 
 from evoagent.evolution_proof import (
+    DEFAULT_PROMPT_DATASET,
     generate_prompt_evolution_cases,
     run_prompt_evolution_proof,
     write_jsonl,
@@ -10,6 +11,10 @@ from evoagent.evolution_proof import (
 
 
 class PromptEvolutionProofTests(unittest.TestCase):
+    @unittest.skipUnless(
+        os.path.isfile(DEFAULT_PROMPT_DATASET),
+        "Optional prompt_evolution_130.jsonl was not included in the supplied archive",
+    )
     def test_feedback_evolution_improves_repository_disjoint_holdout(self):
         cases = generate_prompt_evolution_cases()
         self.assertEqual(130, len(cases))

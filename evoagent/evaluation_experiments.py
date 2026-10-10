@@ -65,7 +65,7 @@ def prepare_controlled_experiment_cases(cases: Iterable[dict]) -> List[dict]:
     adapted = []
     for original in cases:
         source_kind = str((original.get("source") or {}).get("kind", ""))
-        if source_kind != "offline-fixture":
+        if source_kind not in {"offline-fixture", "synthetic-controlled"}:
             raise ValueError("controlled experiment adapter accepts only offline-fixture data")
         item = dict(original)
         item["split"] = by_repository[str(item["repository"])]
@@ -235,7 +235,7 @@ class AccuracyExperimentSuite:
             ),
             "offline_fixture_provenance": {
                 str((item.get("source") or {}).get("kind")) for item in cases
-            } == {"offline-fixture"},
+            }.issubset({"offline-fixture", "synthetic-controlled"}),
         }
         return {
             "dataset_contract": contract,

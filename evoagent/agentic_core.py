@@ -108,6 +108,27 @@ def _collect_evidence(observations: List[dict]) -> Dict[str, dict]:
     return values
 
 
+def _normalize_final_action(result: dict, role: str, user_context: str) -> dict:
+    """Accept a known final payload without granting implicit tool execution."""
+    if result.get("type") == "json_object" and isinstance(result.get("content"), dict):
+        result = dict(result["content"])
+    if "action" in result:
+        return result
+    context = json.loads(user_context)
+    final_field = {
+        "security": "findings", "correctness-reliability": "findings",
+        "critic": "decisions",
+    }.get(role)
+    if role == "lead":
+        final_field = {
+            "delegate": "delegations", "assess-workers": "revision_requests",
+            "finalize": "accepted_finding_indices",
+        }.get(context.get("phase"))
+    if final_field and isinstance(result.get(final_field), list):
+        return {**result, "action": "final"}
+    return result
+
+
 class BoundedRole:
     def __init__(
         self, name: str, prompt: str, client: JsonChatClient,
@@ -184,6 +205,10 @@ class BoundedRole:
                 json.dumps(managed, ensure_ascii=False, default=str),
                 ledger, max_tokens=output_allowance,
             )
+            normalized = _normalize_final_action(action, self.name, user_context)
+            if normalized != action:
+                ledger.trace(self.name, "final_protocol_normalized", step=step)
+            action = normalized
             kind = str(action.get("action", "")).strip().lower()
             ledger.trace(
                 self.name, "autonomous_decision", step=step, action=kind,

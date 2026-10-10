@@ -1,0 +1,9 @@
+{
+  "version": null,
+  "decision": "deferred",
+  "reason": "no supported SKILL.md mutation signal was found in unresolved feedback",
+  "failure_cases_used": 4,
+  "learned_rule_ids": [],
+  "removed_rule_ids": [],
+  "run_id": null
+}

@@ -5,6 +5,8 @@ import unittest
 from evoagent.evolution import EvolutionEngine
 from evoagent.evolution_v2 import RootCauseEvolutionGenerator
 from evoagent.store import TaskStore
+from evoagent.diff_parser import parse_unified_diff
+from evoagent.reviewer import OpenAICompatibleReviewer
 
 
 class EvolutionFeedbackQualityTests(unittest.TestCase):
@@ -44,3 +46,17 @@ class EvolutionFeedbackQualityTests(unittest.TestCase):
                 return {'candidate': {'few_shot_examples': [{'input':False, 'output':7}]}}
         with self.assertRaisesRegex(ValueError, 'few_shot_examples'):
             RootCauseEvolutionGenerator(Client()).generate([], 'base')
+
+    def test_invalid_json_example_is_rejected_instead_of_teaching_invalid_output(self):
+        class Client:
+            provider = 'fake-test'
+            model = 'fixture'
+            def complete_json(self, *args):
+                return {'candidate': {'few_shot_examples': [{'input':'diff', 'output':'{"findings":[]} // comment'}]}}
+        with self.assertRaisesRegex(ValueError, 'valid review JSON'):
+            RootCauseEvolutionGenerator(Client()).generate([], 'base')
+
+    def test_missing_findings_is_an_error_not_a_successful_empty_review(self):
+        parsed = parse_unified_diff('--- a/a.py\n+++ b/a.py\n@@ -1 +1 @@\n-old\n+eval(raw)\n')
+        with self.assertRaisesRegex(ValueError, 'findings array'):
+            OpenAICompatibleReviewer._parse_findings({'cwe':'CWE-95'}, parsed)

@@ -1,0 +1,110 @@
+{
+  "status": "verified-draft",
+  "branch": "evoagent/fix-pr-1-20261010060119",
+  "source_sha": "e6db111b5c2892937ae88a51f80ecf53525886de",
+  "commits": [
+    {
+      "sha": "e34c329e98443b7c6e5c1be8dad3c62804040a7a",
+      "paths": [
+        "fixtures/request_handler.py"
+      ]
+    }
+  ],
+  "draft_pull_request": {
+    "number": 2,
+    "url": "https://github.com/YUshire/evoagent-flow-lab/pull/2"
+  },
+  "patch": "--- a/fixtures/request_handler.py\n+++ b/fixtures/request_handler.py\n@@ -1,3 +1,5 @@\n+import json\n+\n def parse_request_value(raw):\n     \"\"\"Parse an untrusted JSON request value.\"\"\"\n-    return eval(raw)\n+    return json.loads(raw)\n",
+  "behavioral_claims": [
+    "parse_request_value no longer executes arbitrary code; it parses input as JSON via json.loads",
+    "Malicious expressions such as __import__('os').system('id') now raise json.JSONDecodeError instead of executing",
+    "Valid JSON inputs (42, [1, 2], \"hello\") continue to return the same values as before",
+    "Malformed or non-JSON input raises json.JSONDecodeError (a subclass of ValueError) rather than SyntaxError/NameError"
+  ],
+  "related_tests": [
+    "fixtures/tests/test_request_handler.py::RequestParsingTests::test_integer",
+    "fixtures/tests/test_request_handler.py::RequestParsingTests::test_list",
+    "fixtures/tests/test_request_handler.py::RequestParsingTests::test_string"
+  ],
+  "verification": {
+    "structural": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "compile:fixtures/request_handler.py",
+          "passed": true
+        },
+        {
+          "name": "cst-tokenize:fixtures/request_handler.py",
+          "passed": true
+        }
+      ],
+      "duration_seconds": 0.0
+    },
+    "before": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "repository-tests",
+          "passed": true,
+          "detail": "\ntest_integer (test_app.ParsingTests.test_integer) ... ok\ntest_list (test_app.ParsingTests.test_list) ... ok\ntest_string (test_app.ParsingTests.test_string) ... ok\ntest_integer (test_request_handler.RequestParsingTests.test_integer) ... ok\ntest_list (test_request_handler.RequestParsingTests.test_list) ... ok\ntest_string (test_request_handler.RequestParsingTests.test_string) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.000s\n\nOK\n"
+        }
+      ],
+      "duration_seconds": 0.453
+    },
+    "after": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "compile:fixtures/request_handler.py",
+          "passed": true
+        },
+        {
+          "name": "cst-tokenize:fixtures/request_handler.py",
+          "passed": true
+        },
+        {
+          "name": "repository-tests",
+          "passed": true,
+          "detail": "\ntest_integer (test_app.ParsingTests.test_integer) ... ok\ntest_list (test_app.ParsingTests.test_list) ... ok\ntest_string (test_app.ParsingTests.test_string) ... ok\ntest_integer (test_request_handler.RequestParsingTests.test_integer) ... ok\ntest_list (test_request_handler.RequestParsingTests.test_list) ... ok\ntest_string (test_request_handler.RequestParsingTests.test_string) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.000s\n\nOK\n"
+        }
+      ],
+      "duration_seconds": 0.453
+    },
+    "comparison": {
+      "passed": true,
+      "baseline_passed": true,
+      "patched_passed": true,
+      "test_evidence_present": true,
+      "behavioral_regression_detected": false
+    }
+  },
+  "execution": {
+    "mode": "fix-agent",
+    "llm_calls": 1,
+    "tool_calls": 0,
+    "input_tokens": 1758,
+    "output_tokens": 247,
+    "total_tokens": 2005,
+    "cost_usd": 0.0,
+    "duration_ms": 13719,
+    "failed_model_calls": 0,
+    "failed_tool_calls": 0,
+    "model_call_log": [
+      {
+        "role": "fix-agent",
+        "provider": "deepseek",
+        "model": "deepseek-v4-flash",
+        "input_tokens": 1758,
+        "output_tokens": 247,
+        "cost_usd": 0.0,
+        "duration_ms": 1250,
+        "ok": true,
+        "error": ""
+      }
+    ],
+    "tool_call_log": [],
+    "agent_traces": {}
+  },
+  "note": "Verified patch was published only as a draft pull request."
+}

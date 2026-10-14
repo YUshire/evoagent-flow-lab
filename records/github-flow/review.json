@@ -1,0 +1,1151 @@
+{
+  "task_id": "2ba85f7b-217f-455f-8a7f-a7ee67ae1a3b",
+  "state": "SUCCESS",
+  "report": {
+    "repository": "YUshire/evoagent-flow-lab",
+    "pull_request": 1,
+    "summary": "Reviewed 2 file(s); found 3 actionable issue(s). Overall risk: high.",
+    "risk": "high",
+    "findings": [
+      {
+        "rule_id": "SEC-EVAL",
+        "severity": "critical",
+        "title": "Arbitrary code execution via eval() on untrusted request input in parse_request_value",
+        "explanation": "parse_request_value passes its parameter `raw` directly to the built-in eval() with no validation, sanitization, or sandboxing. The function is documented as parsing an 'untrusted JSON request value', and the network-boundary risk signal plus the test suite (which feeds raw string payloads such as \"42\", \"[1, 2]\", '\"hello\"') confirm `raw` is externally controllable request data. Because eval() executes arbitrary Python expressions, an attacker who controls the request value can achieve arbitrary code execution in the server process (e.g. __import__('os').system(...)), leading to full host compromise. The correct primitive for parsing JSON is json.loads, which is safe. No mitigation exists in the surrounding code: the function body is a single eval call, there is no allowlist, no ast.literal_eval, and no input validation. Required evidence addressed: (1) eval call site confirmed at fixtures/request_handler.py:3; (2) `raw` is externally controllable per the docstring and network-boundary signal; (3) exploitability is direct and impact is RCE (CWE-95); (4) no validation or sandboxing present.",
+        "path": "fixtures/request_handler.py",
+        "line": 3,
+        "evidence": "return eval(raw)",
+        "fix": "Replace eval(raw) with a safe parser: `import json; return json.loads(raw)`. If only Python literals are intended, use `ast.literal_eval(raw)`. Never pass untrusted input to eval/exec.",
+        "test": "Add a test asserting malicious payloads are not executed, e.g. `with self.assertRaises(Exception): parse_request_value(\"__import__('os').system('id')\")`, and assert parse_request_value(\"42\") == 42 via json.loads.",
+        "confidence": 0.97,
+        "evidence_refs": [
+          {
+            "evidence_id": "symbol:aae41f42957e7d6e",
+            "tool": "symbol",
+            "output_preview": "{\"symbol\": \"parse_request_value\", \"definitions\": [{\"path\": \"fixtures/request_handler.py\", \"line\": 1, \"kind\": \"FunctionDef\"}], \"callers\": [{\"path\": \"fixtures/tests/test_request_handler.py\", \"line\": 5}, {\"path\": \"fixtures/tests/test_request_handler.py\", \"line\": 6}, {\"path\": \"fixtures/tests/test_request_handler.py\", \"line\": 7}], \"callees\": [{\"path\": \"fixtures/request_handler.py\", \"line\": 3, \"symbol\": \"eval\"}]}"
+          }
+        ],
+        "call_chain": [
+          {
+            "path": "fixtures/request_handler.py",
+            "line": 1,
+            "symbol": "parse_request_value"
+          },
+          {
+            "path": "fixtures/request_handler.py",
+            "line": 3,
+            "symbol": "eval"
+          }
+        ],
+        "source": "security",
+        "gate": {
+          "passed": true,
+          "reasons": [],
+          "exact_location_evidence": true,
+          "strong_evidence_count": 1
+        },
+        "cwe": "CWE-95"
+      },
+      {
+        "rule_id": "SEC-EVAL",
+        "severity": "high",
+        "title": "Tests do not cover malicious expressions or boundary inputs for eval-based parser",
+        "explanation": "The test suite only covers benign inputs (integer, list, string). It never asserts that code-executing expressions are rejected, nor does it cover boundary/edge inputs (empty string, whitespace, malformed JSON, true/false/null, nested structures, oversized input). Because eval() is used, the absence of malicious-input tests means the injection vulnerability is entirely unguarded by the test suite, and the tests give false confidence that parsing is safe.",
+        "path": "fixtures/tests/test_request_handler.py",
+        "line": 4,
+        "evidence": "def test_integer(self): self.assertEqual(parse_request_value(\"42\"), 42)",
+        "fix": "Add negative tests for code-execution payloads (e.g. __import__, open, os.system) asserting they raise or are rejected, plus boundary tests for empty/malformed input and JSON literals true/false/null.",
+        "test": "self.assertRaises(Exception, parse_request_value, \"__import__('os').system('id')\"); self.assertRaises(Exception, parse_request_value, \"\"); self.assertEqual(parse_request_value('true'), True)",
+        "confidence": 0.85,
+        "evidence_refs": [],
+        "call_chain": [
+          {
+            "path": "fixtures/tests/test_request_handler.py",
+            "line": 4,
+            "symbol": "RequestParsingTests.test_integer"
+          }
+        ],
+        "source": "correctness-reliability",
+        "gate": {
+          "passed": true,
+          "reasons": [],
+          "exact_location_evidence": false,
+          "strong_evidence_count": 0
+        },
+        "cwe": "CWE-95"
+      },
+      {
+        "rule_id": "SEC-EVAL",
+        "severity": "medium",
+        "title": "Unhandled exceptions and unexpected return types from eval-based parsing",
+        "explanation": "eval(raw) raises SyntaxError/NameError/TypeError for malformed or non-literal input and can return arbitrary Python objects (functions, modules, class instances) rather than JSON-compatible types. Callers expecting a JSON value receive unexpected types or uncaught exceptions, creating reliability and type-safety failures. The tests do not exercise any error path, so this behavior is unverified.",
+        "path": "fixtures/request_handler.py",
+        "line": 3,
+        "evidence": "return eval(raw)",
+        "fix": "Use json.loads and wrap it to raise a well-defined ValueError/ParseError on invalid input, guaranteeing JSON-compatible return types.",
+        "test": "self.assertRaises(ValueError, parse_request_value, \"not json\"); assert isinstance(parse_request_value('{\"a\": 1}'), dict)",
+        "confidence": 0.7999999999999999,
+        "evidence_refs": [],
+        "call_chain": [
+          {
+            "path": "fixtures/request_handler.py",
+            "line": 3,
+            "symbol": "parse_request_value"
+          }
+        ],
+        "source": "correctness-reliability",
+        "gate": {
+          "passed": true,
+          "reasons": [],
+          "exact_location_evidence": true,
+          "strong_evidence_count": 0
+        },
+        "cwe": "CWE-248"
+      }
+    ],
+    "files_reviewed": [
+      "fixtures/request_handler.py",
+      "fixtures/tests/test_request_handler.py"
+    ],
+    "reviewer": "agentic-reviewer",
+    "collaboration": {
+      "protocol": "lead-workers",
+      "roles": [
+        "lead",
+        "security",
+        "correctness-reliability",
+        "critic"
+      ],
+      "risk_level": "high",
+      "revision_rounds": 0,
+      "lead": {
+        "delegation": {
+          "action": "final",
+          "delegations": [
+            {
+              "assignment_id": "sec-1",
+              "worker": "security",
+              "objective": "Assess whether parse_request_value's use of eval(raw) on untrusted JSON request input enables arbitrary code execution, and identify any mitigations or constraints in the surrounding code.",
+              "files": [
+                "fixtures/request_handler.py",
+                "fixtures/tests/test_request_handler.py"
+              ],
+              "skills": [],
+              "risk_domains": [
+                "dynamic-execution",
+                "injection",
+                "network-boundary"
+              ],
+              "required_evidence": [
+                "Confirm eval call site and its input provenance",
+                "Determine whether raw is externally controllable",
+                "Assess exploitability and impact (CWE-95)",
+                "Note absence of input validation or sandboxing"
+              ]
+            },
+            {
+              "assignment_id": "cor-1",
+              "worker": "correctness-reliability",
+              "objective": "Evaluate correctness and reliability of parse_request_value and its tests, including whether eval-based parsing matches intended JSON semantics and whether tests cover malicious/edge inputs.",
+              "files": [
+                "fixtures/request_handler.py",
+                "fixtures/tests/test_request_handler.py"
+              ],
+              "skills": [],
+              "risk_domains": [
+                "dynamic-execution",
+                "tests",
+                "input-validation"
+              ],
+              "required_evidence": [
+                "Check whether eval semantics diverge from JSON parsing (e.g., Python literals, code execution)",
+                "Assess test coverage for malicious expressions and boundary inputs",
+                "Identify reliability risks from unhandled exceptions or unexpected types"
+              ]
+            }
+          ],
+          "risk_level": "high",
+          "reasoning_summary": "The diff introduces eval() on untrusted request input (CWE-95, critical scanner finding) in a network-boundary handler, plus tests that only cover benign inputs. This is a material security risk warranting a high-risk review with both security and correctness/reliability workers."
+        },
+        "assessments": [
+          {
+            "action": "final",
+            "revision_requests": [],
+            "critic_objective": "Independently verify the critical eval()-based RCE finding (SEC-EVAL) in fixtures/request_handler.py:3: confirm the eval call site and that `raw` is externally controllable untrusted request input, confirm no validation/sandboxing exists, and confirm the recommended fix (json.loads / ast.literal_eval) is correct. Also assess whether the two correctness-reliability findings (missing malicious/boundary test coverage; unhandled exceptions and non-JSON return types) are distinct, non-duplicative, and correctly scoped, and check for any missed issues such as the tests' false confidence or JSON-semantics divergence (true/false/null vs True/False/None).",
+            "reasoning_summary": "Both workers completed with consistent, well-evidenced findings. The security worker confirmed the eval() call site at fixtures/request_handler.py:3 with symbol evidence showing eval as a callee and the function called from the test suite, establishing untrusted input provenance and direct RCE (CWE-95). The correctness-reliability worker independently corroborated the same critical issue and added two distinct, non-duplicative findings: inadequate test coverage for malicious/boundary inputs and unhandled exceptions/unexpected return types. No revision round is warranted because the findings are already supported by concrete evidence (call site, call chain, symbol tool output) and the fixes are actionable; the remaining value is independent verification, which is delegated to the critic. The critical RCE finding is the dominant risk and should be accepted with high confidence."
+          }
+        ],
+        "final": {
+          "accepted_finding_indices": [
+            0,
+            1,
+            2
+          ],
+          "confidence_adjustments": [
+            {
+              "finding_index": 0,
+              "adjustment": 0.0
+            },
+            {
+              "finding_index": 1,
+              "adjustment": -0.05
+            },
+            {
+              "finding_index": 2,
+              "adjustment": -0.05
+            }
+          ],
+          "resolution_summary": "Publish all three findings. Finding 0 (critical, SEC-EVAL, fixtures/request_handler.py:3) is confirmed by changed-line evidence: `return eval(raw)` on a function documented as parsing untrusted request values, with the symbol tool confirming eval as the sole callee. Critic objection that no HTTP entry point is visible is noted but does not reduce validity: the docstring plus network-boundary signal establish the taint source, and eval on untrusted input is unsafe regardless of the immediate caller. Critic objection that the proposed negative test is unreliable is correct — eval executes the payload and returns 0 rather than raising — so the fix guidance is amended: the test must assert non-execution (e.g. monkeypatch os.system and assert it was not called, or assert json.loads rejects the payload), not merely assertRaises. Finding 1 (high, test-coverage gap) is distinct from finding 0 and accepted; its confidence is lowered slightly because its boundary examples (true/false/null) overlap with finding 2's JSON-semantics divergence, and its proposed assertRaises test is likewise incorrect for the same reason and must be replaced with a non-execution assertion. Finding 2 (medium, unhandled exceptions / non-JSON return types) is accepted as a distinct reliability/type-safety defect; confidence lowered slightly because it is largely a downstream consequence of finding 0, and its proposed test assumes the json.loads fix is applied (against current eval, `not json` raises SyntaxError, not ValueError) — the test should be written against the fixed implementation. All findings are anchored to changed lines and supported by tool evidence; no revision round is required.",
+          "action": "final"
+        }
+      },
+      "assignments": [
+        {
+          "assignment_id": "sec-1",
+          "worker": "security",
+          "objective": "Assess whether parse_request_value's use of eval(raw) on untrusted JSON request input enables arbitrary code execution, and identify any mitigations or constraints in the surrounding code.",
+          "files": [
+            "fixtures/request_handler.py",
+            "fixtures/tests/test_request_handler.py"
+          ],
+          "risk_domains": [
+            "dynamic-execution",
+            "injection",
+            "network-boundary"
+          ],
+          "required_evidence": [
+            "Confirm eval call site and its input provenance",
+            "Determine whether raw is externally controllable",
+            "Assess exploitability and impact (CWE-95)",
+            "Note absence of input validation or sandboxing"
+          ],
+          "skills": []
+        },
+        {
+          "assignment_id": "cor-1",
+          "worker": "correctness-reliability",
+          "objective": "Evaluate correctness and reliability of parse_request_value and its tests, including whether eval-based parsing matches intended JSON semantics and whether tests cover malicious/edge inputs.",
+          "files": [
+            "fixtures/request_handler.py",
+            "fixtures/tests/test_request_handler.py"
+          ],
+          "risk_domains": [
+            "dynamic-execution",
+            "tests",
+            "input-validation"
+          ],
+          "required_evidence": [
+            "Check whether eval semantics diverge from JSON parsing (e.g., Python literals, code execution)",
+            "Assess test coverage for malicious expressions and boundary inputs",
+            "Identify reliability risks from unhandled exceptions or unexpected types"
+          ],
+          "skills": []
+        }
+      ],
+      "agent_skills": [],
+      "worker_results": [
+        {
+          "assignment_id": "sec-1",
+          "run_id": "sec-1",
+          "worker": "security",
+          "revision_round": 0,
+          "status": "completed",
+          "findings": [
+            {
+              "rule_id": "SEC-EVAL",
+              "severity": "critical",
+              "title": "Arbitrary code execution via eval() on untrusted request input in parse_request_value",
+              "explanation": "parse_request_value passes its parameter `raw` directly to the built-in eval() with no validation, sanitization, or sandboxing. The function is documented as parsing an 'untrusted JSON request value', and the network-boundary risk signal plus the test suite (which feeds raw string payloads such as \"42\", \"[1, 2]\", '\"hello\"') confirm `raw` is externally controllable request data. Because eval() executes arbitrary Python expressions, an attacker who controls the request value can achieve arbitrary code execution in the server process (e.g. __import__('os').system(...)), leading to full host compromise. The correct primitive for parsing JSON is json.loads, which is safe. No mitigation exists in the surrounding code: the function body is a single eval call, there is no allowlist, no ast.literal_eval, and no input validation. Required evidence addressed: (1) eval call site confirmed at fixtures/request_handler.py:3; (2) `raw` is externally controllable per the docstring and network-boundary signal; (3) exploitability is direct and impact is RCE (CWE-95); (4) no validation or sandboxing present.",
+              "path": "fixtures/request_handler.py",
+              "line": 3,
+              "evidence": "return eval(raw)",
+              "fix": "Replace eval(raw) with a safe parser: `import json; return json.loads(raw)`. If only Python literals are intended, use `ast.literal_eval(raw)`. Never pass untrusted input to eval/exec.",
+              "test": "Add a test asserting malicious payloads are not executed, e.g. `with self.assertRaises(Exception): parse_request_value(\"__import__('os').system('id')\")`, and assert parse_request_value(\"42\") == 42 via json.loads.",
+              "confidence": 0.97,
+              "evidence_refs": [
+                {
+                  "evidence_id": "symbol:aae41f42957e7d6e",
+                  "tool": "symbol",
+                  "output_preview": "{\"symbol\": \"parse_request_value\", \"definitions\": [{\"path\": \"fixtures/request_handler.py\", \"line\": 1, \"kind\": \"FunctionDef\"}], \"callers\": [{\"path\": \"fixtures/tests/test_request_handler.py\", \"line\": 5}, {\"path\": \"fixtures/tests/test_request_handler.py\", \"line\": 6}, {\"path\": \"fixtures/tests/test_request_handler.py\", \"line\": 7}], \"callees\": [{\"path\": \"fixtures/request_handler.py\", \"line\": 3, \"symbol\": \"eval\"}]}"
+                }
+              ],
+              "call_chain": [
+                {
+                  "path": "fixtures/request_handler.py",
+                  "line": 1,
+                  "symbol": "parse_request_value"
+                },
+                {
+                  "path": "fixtures/request_handler.py",
+                  "line": 3,
+                  "symbol": "eval"
+                }
+              ],
+              "source": "security",
+              "gate": {},
+              "cwe": "CWE-95"
+            }
+          ],
+          "error": ""
+        },
+        {
+          "assignment_id": "cor-1",
+          "run_id": "cor-1",
+          "worker": "correctness-reliability",
+          "revision_round": 0,
+          "status": "completed",
+          "findings": [
+            {
+              "rule_id": "SEC-EVAL",
+              "severity": "critical",
+              "title": "eval() used to parse untrusted request values enables arbitrary code execution",
+              "explanation": "parse_request_value passes the untrusted raw request string directly to eval(). eval() executes arbitrary Python expressions, not just JSON literals, so an attacker can supply expressions such as __import__('os').system('...') or open('/etc/passwd').read() and achieve arbitrary code execution. This also diverges from intended JSON semantics: eval accepts Python-only literals (True/False/None, tuples, sets, dict comprehensions, function calls) that JSON does not, and rejects valid JSON like true/false/null. The docstring explicitly states the input is untrusted, confirming the taint source.",
+              "path": "fixtures/request_handler.py",
+              "line": 3,
+              "evidence": "return eval(raw)",
+              "fix": "Replace eval(raw) with a safe parser such as json.loads(raw) (or a strict whitelist/command map). json.loads only parses JSON literals and never executes code.",
+              "test": "Add tests asserting malicious inputs are not executed, e.g. self.assertRaises(Exception, parse_request_value, \"__import__('os').system('id')\") and verify parse_request_value('true') == True while parse_request_value('True') raises, confirming JSON semantics.",
+              "confidence": 0.97,
+              "evidence_refs": [],
+              "call_chain": [
+                {
+                  "path": "fixtures/request_handler.py",
+                  "line": 3,
+                  "symbol": "parse_request_value"
+                }
+              ],
+              "source": "correctness-reliability",
+              "gate": {},
+              "cwe": "CWE-95"
+            },
+            {
+              "rule_id": "SEC-EVAL",
+              "severity": "high",
+              "title": "Tests do not cover malicious expressions or boundary inputs for eval-based parser",
+              "explanation": "The test suite only covers benign inputs (integer, list, string). It never asserts that code-executing expressions are rejected, nor does it cover boundary/edge inputs (empty string, whitespace, malformed JSON, true/false/null, nested structures, oversized input). Because eval() is used, the absence of malicious-input tests means the injection vulnerability is entirely unguarded by the test suite, and the tests give false confidence that parsing is safe.",
+              "path": "fixtures/tests/test_request_handler.py",
+              "line": 4,
+              "evidence": "def test_integer(self): self.assertEqual(parse_request_value(\"42\"), 42)",
+              "fix": "Add negative tests for code-execution payloads (e.g. __import__, open, os.system) asserting they raise or are rejected, plus boundary tests for empty/malformed input and JSON literals true/false/null.",
+              "test": "self.assertRaises(Exception, parse_request_value, \"__import__('os').system('id')\"); self.assertRaises(Exception, parse_request_value, \"\"); self.assertEqual(parse_request_value('true'), True)",
+              "confidence": 0.9,
+              "evidence_refs": [],
+              "call_chain": [
+                {
+                  "path": "fixtures/tests/test_request_handler.py",
+                  "line": 4,
+                  "symbol": "RequestParsingTests.test_integer"
+                }
+              ],
+              "source": "correctness-reliability",
+              "gate": {},
+              "cwe": "CWE-95"
+            },
+            {
+              "rule_id": "SEC-EVAL",
+              "severity": "medium",
+              "title": "Unhandled exceptions and unexpected return types from eval-based parsing",
+              "explanation": "eval(raw) raises SyntaxError/NameError/TypeError for malformed or non-literal input and can return arbitrary Python objects (functions, modules, class instances) rather than JSON-compatible types. Callers expecting a JSON value receive unexpected types or uncaught exceptions, creating reliability and type-safety failures. The tests do not exercise any error path, so this behavior is unverified.",
+              "path": "fixtures/request_handler.py",
+              "line": 3,
+              "evidence": "return eval(raw)",
+              "fix": "Use json.loads and wrap it to raise a well-defined ValueError/ParseError on invalid input, guaranteeing JSON-compatible return types.",
+              "test": "self.assertRaises(ValueError, parse_request_value, \"not json\"); assert isinstance(parse_request_value('{\"a\": 1}'), dict)",
+              "confidence": 0.85,
+              "evidence_refs": [],
+              "call_chain": [
+                {
+                  "path": "fixtures/request_handler.py",
+                  "line": 3,
+                  "symbol": "parse_request_value"
+                }
+              ],
+              "source": "correctness-reliability",
+              "gate": {},
+              "cwe": "CWE-248"
+            }
+          ],
+          "error": ""
+        }
+      ],
+      "revision_results": [],
+      "scanner_findings": 1,
+      "candidate_findings_before_critic": 3,
+      "accepted_findings": 3,
+      "critic_decisions": [
+        {
+          "finding_index": 0,
+          "accepted": true,
+          "objections": [
+            "The docstring and network-boundary signal support external controllability, but the diff does not show an actual HTTP/request entry point calling parse_request_value; the only visible callers are tests. The RCE claim is still valid because the function is explicitly documented as parsing untrusted request values and eval() on such input is unsafe.",
+            "The suggested test `with self.assertRaises(Exception): parse_request_value(\"__import__('os').system('id')\")` is not a reliable negative test: eval would execute the payload and return the system() result (0), so no exception is raised. A correct test should assert that the payload is not executed, e.g. by monkeypatching os.system or checking that json.loads rejects it."
+          ]
+        },
+        {
+          "finding_index": 1,
+          "accepted": true,
+          "objections": [
+            "This finding is distinct from finding 0: finding 0 is the production vulnerability, while this finding is the test-coverage gap that leaves it unguarded.",
+            "The proposed test `self.assertRaises(Exception, parse_request_value, \"__import__('os').system('id')\")` is incorrect for the same reason as above: eval executes the payload and returns 0 rather than raising. The test should verify non-execution, not an exception.",
+            "The boundary examples include JSON literals true/false/null, which are not valid Python literals and would raise NameError under eval; this is a valid coverage gap but overlaps with finding 2's JSON-semantics divergence."
+          ]
+        },
+        {
+          "finding_index": 2,
+          "accepted": true,
+          "objections": [
+            "This finding is distinct from finding 1: finding 1 is about missing malicious/boundary test coverage, while this finding is about the production function's unhandled exceptions and non-JSON return types.",
+            "The severity 'medium' is reasonable for a reliability/type-safety issue, but it is largely a consequence of the critical eval vulnerability in finding 0 and may be considered secondary rather than an independent defect.",
+            "The fix correctly recommends json.loads with a well-defined error, but the test `self.assertRaises(ValueError, parse_request_value, \"not json\")` assumes the fix is applied; against the current eval implementation, `not json` raises SyntaxError, not ValueError."
+          ]
+        }
+      ],
+      "stop_reason": "high-risk-single-pass"
+    },
+    "run_mode": {
+      "requested": "agentic",
+      "effective": "agentic",
+      "model_configured": true,
+      "fallback_reason": ""
+    },
+    "components": [
+      {
+        "kind": "tool-scanner",
+        "name": "local-rule-scanner",
+        "enabled": true
+      },
+      {
+        "kind": "tool-scanner",
+        "name": "security-scanner",
+        "enabled": true
+      },
+      {
+        "kind": "tool-scanner",
+        "name": "reliability-scanner",
+        "enabled": true
+      },
+      {
+        "kind": "tool-scanner",
+        "name": "diff-ast-analyze",
+        "enabled": true
+      },
+      {
+        "kind": "llm-agent",
+        "name": "lead",
+        "enabled": true,
+        "token_budget": 8000,
+        "time_budget_seconds": 60,
+        "tool_permissions": []
+      },
+      {
+        "kind": "llm-agent",
+        "name": "security",
+        "enabled": true,
+        "token_budget": 8000,
+        "time_budget_seconds": 60,
+        "tool_permissions": [
+          "ast_analyze",
+          "changed_line",
+          "git_context",
+          "read_file",
+          "read_project_controls",
+          "run_repository_checks",
+          "run_scanners",
+          "search_diff",
+          "search_repository",
+          "symbol"
+        ]
+      },
+      {
+        "kind": "llm-agent",
+        "name": "correctness-reliability",
+        "enabled": true,
+        "token_budget": 8000,
+        "time_budget_seconds": 60,
+        "tool_permissions": [
+          "ast_analyze",
+          "changed_line",
+          "git_context",
+          "locate_tests",
+          "read_file",
+          "read_project_controls",
+          "run_repository_checks",
+          "run_scanners",
+          "search_diff",
+          "search_repository",
+          "symbol"
+        ]
+      },
+      {
+        "kind": "llm-agent",
+        "name": "critic",
+        "enabled": true,
+        "token_budget": 8000,
+        "time_budget_seconds": 60,
+        "tool_permissions": []
+      },
+      {
+        "kind": "gate",
+        "name": "finding-format-gate",
+        "enabled": true
+      },
+      {
+        "kind": "gate",
+        "name": "evidence-gate",
+        "enabled": true
+      },
+      {
+        "kind": "gate",
+        "name": "confidence-gate",
+        "enabled": true
+      },
+      {
+        "kind": "gate",
+        "name": "release-gate",
+        "enabled": true
+      }
+    ],
+    "execution": {
+      "mode": "agentic",
+      "llm_calls": 7,
+      "tool_calls": 5,
+      "input_tokens": 21825,
+      "output_tokens": 3177,
+      "total_tokens": 25002,
+      "cost_usd": 0.0,
+      "duration_ms": 15592,
+      "failed_model_calls": 0,
+      "failed_tool_calls": 0,
+      "model_call_log": [
+        {
+          "role": "lead",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "input_tokens": 1562,
+          "output_tokens": 353,
+          "cost_usd": 0.0,
+          "duration_ms": 2125,
+          "ok": true,
+          "error": ""
+        },
+        {
+          "role": "security",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "input_tokens": 2195,
+          "output_tokens": 33,
+          "cost_usd": 0.0,
+          "duration_ms": 796,
+          "ok": true,
+          "error": ""
+        },
+        {
+          "role": "security",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "input_tokens": 2724,
+          "output_tokens": 534,
+          "cost_usd": 0.0,
+          "duration_ms": 2890,
+          "ok": true,
+          "error": ""
+        },
+        {
+          "role": "correctness-reliability",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "input_tokens": 2229,
+          "output_tokens": 952,
+          "cost_usd": 0.0,
+          "duration_ms": 4733,
+          "ok": true,
+          "error": ""
+        },
+        {
+          "role": "lead",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "input_tokens": 5214,
+          "output_tokens": 336,
+          "cost_usd": 0.0,
+          "duration_ms": 2625,
+          "ok": true,
+          "error": ""
+        },
+        {
+          "role": "critic",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "input_tokens": 2457,
+          "output_tokens": 558,
+          "cost_usd": 0.0,
+          "duration_ms": 3437,
+          "ok": true,
+          "error": ""
+        },
+        {
+          "role": "lead",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "input_tokens": 5444,
+          "output_tokens": 411,
+          "cost_usd": 0.0,
+          "duration_ms": 2547,
+          "ok": true,
+          "error": ""
+        }
+      ],
+      "tool_call_log": [
+        {
+          "role": "agentic-scanner",
+          "tool": "local-rule-scanner",
+          "arguments": {
+            "added_lines": 10
+          },
+          "ok": true,
+          "duration_ms": 0,
+          "result_preview": "{'findings': 1}",
+          "error": ""
+        },
+        {
+          "role": "agentic-scanner",
+          "tool": "security-scanner",
+          "arguments": {
+            "added_lines": 10
+          },
+          "ok": true,
+          "duration_ms": 0,
+          "result_preview": "{'findings': 1}",
+          "error": ""
+        },
+        {
+          "role": "agentic-scanner",
+          "tool": "reliability-scanner",
+          "arguments": {
+            "added_lines": 10
+          },
+          "ok": true,
+          "duration_ms": 0,
+          "result_preview": "{'findings': 0}",
+          "error": ""
+        },
+        {
+          "role": "agentic-scanner",
+          "tool": "diff-ast-analyze",
+          "arguments": {
+            "path": "fixtures/request_handler.py",
+            "line": 3
+          },
+          "ok": true,
+          "duration_ms": 0,
+          "result_preview": "{'path': 'fixtures/request_handler.py', 'line': 3, 'valid_python_ast': True, 'structures': ['Call'], 'rule_id': 'SEC-EVAL'}",
+          "error": ""
+        },
+        {
+          "role": "security",
+          "tool": "symbol",
+          "arguments": {
+            "name": "parse_request_value"
+          },
+          "ok": true,
+          "duration_ms": 203,
+          "result_preview": "{'evidence_id': 'symbol:aae41f42957e7d6e', 'tool': 'symbol', 'output': {'symbol': 'parse_request_value', 'definitions': [{'path': 'fixtures/request_handler.py', 'line': 1, 'kind': 'FunctionDef'}], 'callers': [{'path': 'fixtures/tests/test_request_handler.py', 'line': 5}, {'path': 'fixtures/tests/test_request_handler.py', 'line': 6}, {'path': 'fixtures/tests/test_request_handler.py', 'line': 7}], 'callees': [{'path': 'fixtures/request_handler.py', 'line': 3, 'symbol': 'eval'}]}}",
+          "error": ""
+        }
+      ],
+      "agent_traces": {
+        "context-manager": [
+          {
+            "sequence": 1,
+            "event": "memory_recalled",
+            "elapsed_ms": 0,
+            "count": 0,
+            "repository": "YUshire/evoagent-flow-lab",
+            "tenant_id": "default"
+          }
+        ],
+        "lead-session": [
+          {
+            "sequence": 1,
+            "event": "lead_activated",
+            "elapsed_ms": 0,
+            "phase": "delegate"
+          },
+          {
+            "sequence": 2,
+            "event": "lead_completed",
+            "elapsed_ms": 2139,
+            "phase": "delegate"
+          },
+          {
+            "sequence": 3,
+            "event": "assignment_created",
+            "elapsed_ms": 2139,
+            "assignment_id": "sec-1",
+            "worker": "security",
+            "objective": "Assess whether parse_request_value's use of eval(raw) on untrusted JSON request input enables arbitrary code execution, and identify any mitigations or constraints in the surrounding code."
+          },
+          {
+            "sequence": 4,
+            "event": "assignment_created",
+            "elapsed_ms": 2139,
+            "assignment_id": "cor-1",
+            "worker": "correctness-reliability",
+            "objective": "Evaluate correctness and reliability of parse_request_value and its tests, including whether eval-based parsing matches intended JSON semantics and whether tests cover malicious/edge inputs."
+          },
+          {
+            "sequence": 5,
+            "event": "worker_reported",
+            "elapsed_ms": 6062,
+            "assignment_id": "sec-1",
+            "run_id": "sec-1",
+            "worker": "security",
+            "status": "completed",
+            "findings": 1,
+            "revision_round": 0
+          },
+          {
+            "sequence": 6,
+            "event": "worker_reported",
+            "elapsed_ms": 6905,
+            "assignment_id": "cor-1",
+            "run_id": "cor-1",
+            "worker": "correctness-reliability",
+            "status": "completed",
+            "findings": 3,
+            "revision_round": 0
+          },
+          {
+            "sequence": 7,
+            "event": "lead_activated",
+            "elapsed_ms": 6921,
+            "phase": "assess-workers"
+          },
+          {
+            "sequence": 8,
+            "event": "lead_completed",
+            "elapsed_ms": 9546,
+            "phase": "assess-workers"
+          },
+          {
+            "sequence": 9,
+            "event": "lead_activated",
+            "elapsed_ms": 13014,
+            "phase": "finalize"
+          },
+          {
+            "sequence": 10,
+            "event": "lead_completed",
+            "elapsed_ms": 15562,
+            "phase": "finalize"
+          }
+        ],
+        "lead": [
+          {
+            "sequence": 1,
+            "event": "started",
+            "elapsed_ms": 0,
+            "token_budget": 8000,
+            "time_budget_seconds": 60,
+            "tools": []
+          },
+          {
+            "sequence": 2,
+            "event": "context_prepared",
+            "elapsed_ms": 14,
+            "step": 1,
+            "estimated_input_tokens": 1168,
+            "input_token_limit": 20000,
+            "observations_summarized": 0,
+            "observations_dropped": 0
+          },
+          {
+            "sequence": 3,
+            "event": "autonomous_decision",
+            "elapsed_ms": 2139,
+            "step": 1,
+            "action": "final",
+            "tool": "",
+            "reason": ""
+          },
+          {
+            "sequence": 4,
+            "event": "finished",
+            "elapsed_ms": 2139,
+            "step": 1
+          },
+          {
+            "sequence": 5,
+            "event": "started",
+            "elapsed_ms": 6921,
+            "token_budget": 8000,
+            "time_budget_seconds": 60,
+            "tools": []
+          },
+          {
+            "sequence": 6,
+            "event": "context_prepared",
+            "elapsed_ms": 6921,
+            "step": 1,
+            "estimated_input_tokens": 5547,
+            "input_token_limit": 20000,
+            "observations_summarized": 0,
+            "observations_dropped": 0
+          },
+          {
+            "sequence": 7,
+            "event": "autonomous_decision",
+            "elapsed_ms": 9546,
+            "step": 1,
+            "action": "final",
+            "tool": "",
+            "reason": ""
+          },
+          {
+            "sequence": 8,
+            "event": "finished",
+            "elapsed_ms": 9546,
+            "step": 1
+          },
+          {
+            "sequence": 9,
+            "event": "started",
+            "elapsed_ms": 13014,
+            "token_budget": 8000,
+            "time_budget_seconds": 60,
+            "tools": []
+          },
+          {
+            "sequence": 10,
+            "event": "context_prepared",
+            "elapsed_ms": 13014,
+            "step": 1,
+            "estimated_input_tokens": 5864,
+            "input_token_limit": 20000,
+            "observations_summarized": 0,
+            "observations_dropped": 0
+          },
+          {
+            "sequence": 11,
+            "event": "final_protocol_normalized",
+            "elapsed_ms": 15562,
+            "step": 1
+          },
+          {
+            "sequence": 12,
+            "event": "autonomous_decision",
+            "elapsed_ms": 15562,
+            "step": 1,
+            "action": "final",
+            "tool": "",
+            "reason": ""
+          },
+          {
+            "sequence": 13,
+            "event": "finished",
+            "elapsed_ms": 15562,
+            "step": 1
+          }
+        ],
+        "security": [
+          {
+            "sequence": 1,
+            "event": "started",
+            "elapsed_ms": 2155,
+            "token_budget": 8000,
+            "time_budget_seconds": 60,
+            "tools": [
+              "ast_analyze",
+              "changed_line",
+              "git_context",
+              "read_file",
+              "read_project_controls",
+              "run_repository_checks",
+              "run_scanners",
+              "search_diff",
+              "search_repository",
+              "symbol"
+            ]
+          },
+          {
+            "sequence": 2,
+            "event": "context_prepared",
+            "elapsed_ms": 2155,
+            "step": 1,
+            "estimated_input_tokens": 2090,
+            "input_token_limit": 20000,
+            "observations_summarized": 0,
+            "observations_dropped": 0
+          },
+          {
+            "sequence": 3,
+            "event": "autonomous_decision",
+            "elapsed_ms": 2952,
+            "step": 1,
+            "action": "tool",
+            "tool": "symbol",
+            "reason": "Confirm callers/callees and whether raw is externally controllable"
+          },
+          {
+            "sequence": 4,
+            "event": "tool_observation",
+            "elapsed_ms": 3155,
+            "step": 1,
+            "tool": "symbol",
+            "ok": true
+          },
+          {
+            "sequence": 5,
+            "event": "context_prepared",
+            "elapsed_ms": 3171,
+            "step": 2,
+            "estimated_input_tokens": 2556,
+            "input_token_limit": 20000,
+            "observations_summarized": 0,
+            "observations_dropped": 0
+          },
+          {
+            "sequence": 6,
+            "event": "autonomous_decision",
+            "elapsed_ms": 6062,
+            "step": 2,
+            "action": "final",
+            "tool": "",
+            "reason": ""
+          },
+          {
+            "sequence": 7,
+            "event": "finished",
+            "elapsed_ms": 6062,
+            "step": 2
+          }
+        ],
+        "correctness-reliability": [
+          {
+            "sequence": 1,
+            "event": "started",
+            "elapsed_ms": 2155,
+            "token_budget": 8000,
+            "time_budget_seconds": 60,
+            "tools": [
+              "ast_analyze",
+              "changed_line",
+              "git_context",
+              "locate_tests",
+              "read_file",
+              "read_project_controls",
+              "run_repository_checks",
+              "run_scanners",
+              "search_diff",
+              "search_repository",
+              "symbol"
+            ]
+          },
+          {
+            "sequence": 2,
+            "event": "context_prepared",
+            "elapsed_ms": 2171,
+            "step": 1,
+            "estimated_input_tokens": 2172,
+            "input_token_limit": 20000,
+            "observations_summarized": 0,
+            "observations_dropped": 0
+          },
+          {
+            "sequence": 3,
+            "event": "final_protocol_normalized",
+            "elapsed_ms": 6905,
+            "step": 1
+          },
+          {
+            "sequence": 4,
+            "event": "autonomous_decision",
+            "elapsed_ms": 6905,
+            "step": 1,
+            "action": "final",
+            "tool": "",
+            "reason": ""
+          },
+          {
+            "sequence": 5,
+            "event": "finished",
+            "elapsed_ms": 6905,
+            "step": 1
+          }
+        ],
+        "critic": [
+          {
+            "sequence": 1,
+            "event": "started",
+            "elapsed_ms": 9546,
+            "token_budget": 8000,
+            "time_budget_seconds": 60,
+            "tools": []
+          },
+          {
+            "sequence": 2,
+            "event": "context_prepared",
+            "elapsed_ms": 9562,
+            "step": 1,
+            "estimated_input_tokens": 2612,
+            "input_token_limit": 20000,
+            "observations_summarized": 0,
+            "observations_dropped": 0
+          },
+          {
+            "sequence": 3,
+            "event": "autonomous_decision",
+            "elapsed_ms": 13000,
+            "step": 1,
+            "action": "final",
+            "tool": "",
+            "reason": ""
+          },
+          {
+            "sequence": 4,
+            "event": "finished",
+            "elapsed_ms": 13000,
+            "step": 1
+          }
+        ],
+        "evidence-gate": [
+          {
+            "sequence": 1,
+            "event": "completed",
+            "elapsed_ms": 15562,
+            "format": {
+              "rejected": 0
+            },
+            "evidence": {
+              "rejected": 0
+            },
+            "confidence": {
+              "minimum": 0.55,
+              "rejected": 0
+            },
+            "release": {
+              "rejected": 0
+            },
+            "accepted": 3,
+            "rejected": 0
+          }
+        ]
+      },
+      "context_management": {
+        "strategy": "risk-ranked-hunk-map-reduce+token-aware-sliding-window",
+        "semantic_compression_enabled": true,
+        "compression_calls": 6,
+        "estimated_original_tokens": 1644,
+        "estimated_compressed_tokens": 3493,
+        "estimated_reduction_ratio": -1.1247,
+        "memory_recall": {
+          "recalled": 0,
+          "scopes": {},
+          "query_sha256": "7df75903c4b068048c11b28ec2878605c874954b308d55ee7f5058412735c17e"
+        },
+        "compressions": [
+          {
+            "label": "lead:delegate",
+            "source_sha256": "550a293dc914c25c0a9f8fe03a98d0ebb1ea4b511a6c24f0880b53e544e7e2b6",
+            "original_tokens": 274,
+            "compressed_tokens": 577,
+            "token_budget": 12000,
+            "applied": false,
+            "total_hunks": 2,
+            "selected_hunks": 2,
+            "omitted_hunks": 0,
+            "map_chunks": 1,
+            "algorithm": "risk-ranked-hunk-map-reduce"
+          },
+          {
+            "label": "security:assignment",
+            "source_sha256": "550a293dc914c25c0a9f8fe03a98d0ebb1ea4b511a6c24f0880b53e544e7e2b6",
+            "original_tokens": 274,
+            "compressed_tokens": 593,
+            "token_budget": 12000,
+            "applied": false,
+            "total_hunks": 2,
+            "selected_hunks": 2,
+            "omitted_hunks": 0,
+            "map_chunks": 1,
+            "algorithm": "risk-ranked-hunk-map-reduce"
+          },
+          {
+            "label": "correctness-reliability:assignment",
+            "source_sha256": "550a293dc914c25c0a9f8fe03a98d0ebb1ea4b511a6c24f0880b53e544e7e2b6",
+            "original_tokens": 274,
+            "compressed_tokens": 592,
+            "token_budget": 12000,
+            "applied": false,
+            "total_hunks": 2,
+            "selected_hunks": 2,
+            "omitted_hunks": 0,
+            "map_chunks": 1,
+            "algorithm": "risk-ranked-hunk-map-reduce"
+          },
+          {
+            "label": "lead:assess-workers",
+            "source_sha256": "550a293dc914c25c0a9f8fe03a98d0ebb1ea4b511a6c24f0880b53e544e7e2b6",
+            "original_tokens": 274,
+            "compressed_tokens": 577,
+            "token_budget": 12000,
+            "applied": false,
+            "total_hunks": 2,
+            "selected_hunks": 2,
+            "omitted_hunks": 0,
+            "map_chunks": 1,
+            "algorithm": "risk-ranked-hunk-map-reduce"
+          },
+          {
+            "label": "critic:blind-review",
+            "source_sha256": "550a293dc914c25c0a9f8fe03a98d0ebb1ea4b511a6c24f0880b53e544e7e2b6",
+            "original_tokens": 274,
+            "compressed_tokens": 577,
+            "token_budget": 12000,
+            "applied": false,
+            "total_hunks": 2,
+            "selected_hunks": 2,
+            "omitted_hunks": 0,
+            "map_chunks": 1,
+            "algorithm": "risk-ranked-hunk-map-reduce"
+          },
+          {
+            "label": "lead:finalize",
+            "source_sha256": "550a293dc914c25c0a9f8fe03a98d0ebb1ea4b511a6c24f0880b53e544e7e2b6",
+            "original_tokens": 274,
+            "compressed_tokens": 577,
+            "token_budget": 12000,
+            "applied": false,
+            "total_hunks": 2,
+            "selected_hunks": 2,
+            "omitted_hunks": 0,
+            "map_chunks": 1,
+            "algorithm": "risk-ranked-hunk-map-reduce"
+          }
+        ]
+      },
+      "gates": {
+        "format": {
+          "rejected": 0
+        },
+        "evidence": {
+          "rejected": 0
+        },
+        "confidence": {
+          "minimum": 0.55,
+          "rejected": 0
+        },
+        "release": {
+          "rejected": 0
+        },
+        "accepted": 3,
+        "rejected": 0
+      },
+      "rejected_findings": [],
+      "repository_context": {
+        "available": true,
+        "root_supplied": true
+      }
+    }
+  }
+}

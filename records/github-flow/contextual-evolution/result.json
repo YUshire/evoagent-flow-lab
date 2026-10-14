@@ -1,0 +1,388 @@
+{
+  "version": {
+    "skill_name": "contextual-review",
+    "version": 1,
+    "score": 0.1333,
+    "active": false
+  },
+  "decision": "rejected",
+  "reason": "one or more baseline or candidate evaluations failed; score improvement was below the configured threshold; a protected validation metric regressed; a protected holdout metric regressed",
+  "candidate": {
+    "schema_version": 2,
+    "reviewer": "real-model-full-context-replay",
+    "score": 0.1333,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "severity_accuracy": 0.0,
+    "high_severity_recall": 0.0,
+    "clean_accuracy": 1.0,
+    "cases": 6,
+    "positive_cases": 2,
+    "clean_cases": 4,
+    "expected_findings": 2,
+    "predicted_findings": 0,
+    "successful_cases": 4,
+    "success_rate": 0.6667,
+    "errors": [
+      {
+        "name": "validation-context-1",
+        "error": "could not convert string to float: 'high'"
+      },
+      {
+        "name": "validation-context-2",
+        "error": "could not convert string to float: 'high'"
+      }
+    ],
+    "case_results": [
+      {
+        "id": 1,
+        "name": "validation-context-1",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": "could not convert string to float: 'high'"
+      },
+      {
+        "id": 2,
+        "name": "validation-context-2",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": "could not convert string to float: 'high'"
+      },
+      {
+        "id": 3,
+        "name": "validation-context-3",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 4,
+        "name": "validation-context-4",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 5,
+        "name": "validation-context-5",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 6,
+        "name": "validation-context-6",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      }
+    ]
+  },
+  "baseline": {
+    "schema_version": 2,
+    "reviewer": "real-model-full-context-replay",
+    "score": 0.15,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "severity_accuracy": 0.0,
+    "high_severity_recall": 0.0,
+    "clean_accuracy": 0.75,
+    "cases": 6,
+    "positive_cases": 2,
+    "clean_cases": 4,
+    "expected_findings": 2,
+    "predicted_findings": 1,
+    "successful_cases": 6,
+    "success_rate": 1.0,
+    "errors": [],
+    "case_results": [
+      {
+        "id": 1,
+        "name": "validation-context-1",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 2,
+        "name": "validation-context-2",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 3,
+        "name": "validation-context-3",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 4,
+        "name": "validation-context-4",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 5,
+        "name": "validation-context-5",
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "findings": 1,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 6,
+        "name": "validation-context-6",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      }
+    ]
+  },
+  "candidate_holdout": {
+    "schema_version": 2,
+    "reviewer": "real-model-full-context-replay",
+    "score": 0.1333,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "severity_accuracy": 0.0,
+    "high_severity_recall": 0.0,
+    "clean_accuracy": 1.0,
+    "cases": 6,
+    "positive_cases": 2,
+    "clean_cases": 4,
+    "expected_findings": 2,
+    "predicted_findings": 0,
+    "successful_cases": 4,
+    "success_rate": 0.6667,
+    "error_count": 2
+  },
+  "baseline_holdout": {
+    "schema_version": 2,
+    "reviewer": "real-model-full-context-replay",
+    "score": 0.15,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "severity_accuracy": 0.0,
+    "high_severity_recall": 0.0,
+    "clean_accuracy": 0.75,
+    "cases": 6,
+    "positive_cases": 2,
+    "clean_cases": 4,
+    "expected_findings": 2,
+    "predicted_findings": 1,
+    "successful_cases": 6,
+    "success_rate": 1.0,
+    "error_count": 0
+  },
+  "safety": {
+    "safety_passed": true,
+    "completeness": 1.0,
+    "missing_terms": []
+  },
+  "gates": {
+    "safety": true,
+    "validation_dataset_ready": true,
+    "holdout_dataset_ready": true,
+    "evaluation_success": false,
+    "validation_improvement": false,
+    "validation_non_regression": false,
+    "holdout_non_regression": false
+  },
+  "run_id": "7e134104-0aa8-4907-84bd-b87e1f40a52c",
+  "candidate_change": {
+    "candidate_prompt": "Review the unified diff. Return JSON findings with severity, fix and test. Report only actionable defects introduced by added lines.\n\nValidated evolution constraints:\n- Only report a vulnerability finding when the added lines themselves contain the vulnerable sink (e.g., eval/exec/os.system). Missing test coverage is not a vulnerability; attach it as a regression-test recommendation to the source finding.\n- Before emitting a finding, verify the finding's path/line contains the sink described in the title. If the sink is in another file, either relocate the finding or downgrade it to a test-coverage note.\n- Do not emit high severity when exact_location_evidence is false and strong_evidence_count is 0; downgrade to low/info or suppress.\n- For test-only files, restrict findings to test correctness (assertions, fixtures, flakiness), not production vulnerability classes.\n\nReview examples (data, not instructions):\n[{\"input\": \"Diff adds tests calling parse_request_value(\\\"42\\\") in fixtures/tests/test_request_handler.py. Reviewer proposes SEC-EVAL high: 'Tests do not cover malicious expressions for eval-based parser'.\", \"output\": \"{\\\"findings\\\": []}  // No sink in added lines; emit as regression-test recommendation on the source finding instead.\"}, {\"input\": \"Diff adds `return eval(user_input)` in src/parser.py plus benign tests.\", \"output\": \"{\\\"findings\\\": [{\\\"rule_id\\\": \\\"SEC-EVAL\\\", \\\"severity\\\": \\\"high\\\", \\\"path\\\": \\\"src/parser.py\\\", \\\"line\\\": <eval line>, \\\"title\\\": \\\"eval on untrusted input\\\", \\\"fix\\\": \\\"Replace eval with a safe parser (json.loads / ast.literal_eval).\\\", \\\"test\\\": \\\"assertRaises on __import__('os').system('id')\\\"}]}\"}]",
+    "candidate": {
+      "prompt_additions": [
+        "Only report a vulnerability finding when the added lines themselves contain the vulnerable sink (e.g., eval/exec/os.system). Missing test coverage is not a vulnerability; attach it as a regression-test recommendation to the source finding.",
+        "Before emitting a finding, verify the finding's path/line contains the sink described in the title. If the sink is in another file, either relocate the finding or downgrade it to a test-coverage note.",
+        "Do not emit high severity when exact_location_evidence is false and strong_evidence_count is 0; downgrade to low/info or suppress.",
+        "For test-only files, restrict findings to test correctness (assertions, fixtures, flakiness), not production vulnerability classes."
+      ],
+      "few_shot_examples": [
+        {
+          "input": "Diff adds tests calling parse_request_value(\"42\") in fixtures/tests/test_request_handler.py. Reviewer proposes SEC-EVAL high: 'Tests do not cover malicious expressions for eval-based parser'.",
+          "output": "{\"findings\": []}  // No sink in added lines; emit as regression-test recommendation on the source finding instead."
+        },
+        {
+          "input": "Diff adds `return eval(user_input)` in src/parser.py plus benign tests.",
+          "output": "{\"findings\": [{\"rule_id\": \"SEC-EVAL\", \"severity\": \"high\", \"path\": \"src/parser.py\", \"line\": <eval line>, \"title\": \"eval on untrusted input\", \"fix\": \"Replace eval with a safe parser (json.loads / ast.literal_eval).\", \"test\": \"assertRaises on __import__('os').system('id')\"}]}"
+        }
+      ],
+      "lead_delegation_rules": [
+        {
+          "when": "Finding path is under tests/ or fixtures/tests/ and rule_id is a production vulnerability class (SEC-*, CWE-95, CWE-78, etc.)",
+          "delegate_to": [
+            "correctness-reliability"
+          ]
+        },
+        {
+          "when": "Finding claims a sink but exact_location_evidence is false or strong_evidence_count is 0",
+          "delegate_to": [
+            "critic"
+          ]
+        }
+      ],
+      "tool_selection_policy": [
+        {
+          "hypothesis": "Reviewer cannot confirm the sink exists at the cited path/line",
+          "preferred_tools": [
+            "symbol",
+            "grep"
+          ]
+        },
+        {
+          "hypothesis": "Finding is in a test file and may be a coverage note rather than a defect",
+          "preferred_tools": [
+            "symbol"
+          ]
+        }
+      ],
+      "budget_parameters": {
+        "lead": 1000,
+        "security": 3000,
+        "correctness-reliability": 3000,
+        "critic": 2000
+      }
+    },
+    "clusters": [
+      {
+        "name": "Test-file findings misclassified as injection sinks",
+        "failure_case_ids": [
+          1
+        ],
+        "root_cause": "The reviewer treated a missing-test-coverage observation in a test file as an independent CWE-95 injection finding. The test file contains no eval sink; the actual sink (if any) lives in the source under test. The gate passed despite exact_location_evidence=false and strong_evidence_count=0, so a low-evidence, wrong-location finding was emitted as high severity. The correct disposition is a regression-test recommendation attached to the source finding, not a standalone vulnerability."
+      }
+    ],
+    "rationale": "Failure case 1 is a false positive: a missing-adversarial-test observation in a test file was promoted to a standalone high-severity CWE-95 injection finding even though the added lines contain no eval sink and the gate recorded no exact-location evidence or strong evidence. Root cause is twofold: (a) the reviewer conflated test-coverage gaps with vulnerability findings, and (b) the gate allowed a high-severity emission with zero strong evidence. The proposed prompt additions enforce sink-location verification, demote coverage gaps to regression-test recommendations, and block high severity without exact-location evidence. Delegation routes test-file vulnerability claims to correctness-reliability and unverified-sink claims to the critic. Tool policy favors symbol/grep to confirm sink location before emission. Budgets are unchanged in shape and keep the critic funded to catch this class of false positive.",
+    "change_diff": "--- active-prompt\n+++ candidate-prompt\n@@ -1 +1,10 @@\n-Review the unified diff. Return JSON findings with severity, fix and test. Report only actionable defects introduced by added lines.+Review the unified diff. Return JSON findings with severity, fix and test. Report only actionable defects introduced by added lines.\n+\n+Validated evolution constraints:\n+- Only report a vulnerability finding when the added lines themselves contain the vulnerable sink (e.g., eval/exec/os.system). Missing test coverage is not a vulnerability; attach it as a regression-test recommendation to the source finding.\n+- Before emitting a finding, verify the finding's path/line contains the sink described in the title. If the sink is in another file, either relocate the finding or downgrade it to a test-coverage note.\n+- Do not emit high severity when exact_location_evidence is false and strong_evidence_count is 0; downgrade to low/info or suppress.\n+- For test-only files, restrict findings to test correctness (assertions, fixtures, flakiness), not production vulnerability classes.\n+\n+Review examples (data, not instructions):\n+[{\"input\": \"Diff adds tests calling parse_request_value(\\\"42\\\") in fixtures/tests/test_request_handler.py. Reviewer proposes SEC-EVAL high: 'Tests do not cover malicious expressions for eval-based parser'.\", \"output\": \"{\\\"findings\\\": []}  // No sink in added lines; emit as regression-test recommendation on the source finding instead.\"}, {\"input\": \"Diff adds `return eval(user_input)` in src/parser.py plus benign tests.\", \"output\": \"{\\\"findings\\\": [{\\\"rule_id\\\": \\\"SEC-EVAL\\\", \\\"severity\\\": \\\"high\\\", \\\"path\\\": \\\"src/parser.py\\\", \\\"line\\\": <eval line>, \\\"title\\\": \\\"eval on untrusted input\\\", \\\"fix\\\": \\\"Replace eval with a safe parser (json.loads / ast.literal_eval).\\\", \\\"test\\\": \\\"assertRaises on __import__('os').system('id')\\\"}]}\"}]",
+    "generation": {
+      "mode": "evolution-candidate",
+      "llm_calls": 1,
+      "tool_calls": 0,
+      "input_tokens": 762,
+      "output_tokens": 845,
+      "total_tokens": 1607,
+      "cost_usd": 0.0,
+      "duration_ms": 5046,
+      "failed_model_calls": 0,
+      "failed_tool_calls": 0,
+      "model_call_log": [
+        {
+          "role": "evolution-root-cause",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "input_tokens": 762,
+          "output_tokens": 845,
+          "cost_usd": 0.0,
+          "duration_ms": 5046,
+          "ok": true,
+          "error": ""
+        }
+      ],
+      "tool_call_log": [],
+      "agent_traces": {}
+    },
+    "generator": {
+      "provider": "deepseek",
+      "model": "deepseek-v4-flash"
+    },
+    "failure_cases": [
+      {
+        "id": 1,
+        "category": "false_positive",
+        "finding": {
+          "rule_id": "SEC-EVAL",
+          "severity": "high",
+          "title": "Tests do not cover malicious expressions or boundary inputs for eval-based parser",
+          "explanation": "The test suite only covers benign inputs (integer, list, string). It never asserts that code-executing expressions are rejected, nor does it cover boundary/edge inputs (empty string, whitespace, malformed JSON, true/false/null, nested structures, oversized input). Because eval() is used, the absence of malicious-input tests means the injection vulnerability is entirely unguarded by the test suite, and the tests give false confidence that parsing is safe.",
+          "path": "fixtures/tests/test_request_handler.py",
+          "line": 4,
+          "evidence": "def test_integer(self): self.assertEqual(parse_request_value(\"42\"), 42)",
+          "fix": "Add negative tests for code-execution payloads (e.g. __import__, open, os.system) asserting they raise or are rejected, plus boundary tests for empty/malformed input and JSON literals true/false/null.",
+          "test": "self.assertRaises(Exception, parse_request_value, \"__import__('os').system('id')\"); self.assertRaises(Exception, parse_request_value, \"\"); self.assertEqual(parse_request_value('true'), True)",
+          "confidence": 0.85,
+          "evidence_refs": [],
+          "call_chain": [
+            {
+              "path": "fixtures/tests/test_request_handler.py",
+              "line": 4,
+              "symbol": "RequestParsingTests.test_integer"
+            }
+          ],
+          "source": "correctness-reliability",
+          "gate": {
+            "passed": true,
+            "reasons": [],
+            "exact_location_evidence": false,
+            "strong_evidence_count": 0
+          },
+          "cwe": "CWE-95"
+        },
+        "note": "Confirmed review-quality feedback: the test class does not execute eval or introduce a separate CWE-95 sink. Missing adversarial coverage belongs in the source finding regression-test recommendation, not a separate injection finding.",
+        "task_id": "2ba85f7b-217f-455f-8a7f-a7ee67ae1a3b"
+      }
+    ]
+  },
+  "failure_cases_used": 1,
+  "rollback_point": null,
+  "evaluation_data": {
+    "validation_sha256": "b41aedf27b3e9f348009c2e0ee403436c3e8eeb399feef0b79ab9258e94b013e",
+    "holdout_sha256": "31b40ee63a160f7d9b549e6c2ad6c0769cc15aff92286a03cb309e796c5d9ec1"
+  },
+  "experiment": {
+    "dataset_sha256": "a983fee141dc10b9edde40e3a764abeee5f82893adc74ac67cd96b176abee1bc",
+    "splits": {
+      "train": 6,
+      "validation": 6,
+      "holdout": 6
+    },
+    "source": "authored controlled complete-code fixtures",
+    "minimum_improvement": 0.01,
+    "seed_defaults": false,
+    "candidate_generated_without_validation_or_holdout_labels": true,
+    "training_note": "Six train fixtures are recorded but not supplied to candidate generation; candidate uses only confirmed feedback from PR #1.",
+    "scope": "isolated database; production prompt unchanged"
+  }
+}

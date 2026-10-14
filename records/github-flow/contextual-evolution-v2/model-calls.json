@@ -1,0 +1,296 @@
+[
+  {
+    "prompt_sha256": "7744079c9edf276b4855958d232aff16e93c6623d8d3812a49b8ddcfb209eceb",
+    "diff_sha256": "f9d5e0fc4c5d831a05f97e806cd4675569743a401bc1afbad547e1e45cfacf7f",
+    "response": {
+      "findings": [
+        {
+          "cwe": "CWE-95",
+          "rule_id": "SEC-EVAL",
+          "severity": "critical",
+          "title": "Arbitrary code execution via eval on external request data",
+          "explanation": "The function deserialize_request passes untrusted external request text directly to eval(), which executes arbitrary Python code. An attacker controlling the request data can run any code in the process context, leading to full compromise.",
+          "path": "validation/1.py",
+          "line": 3,
+          "evidence": "return eval(text)",
+          "fix": "Replace eval() with a safe deserialization format such as json.loads(text) (or ast.literal_eval if only Python literals are needed), and validate the parsed structure against an expected schema.",
+          "test": "Call deserialize_request('__import__(\"os\").system(\"id\")') and assert it does not execute a shell command; verify the function raises a ValueError/JSONDecodeError for non-JSON input instead of executing it.",
+          "confidence": 0.99
+        }
+      ]
+    }
+  },
+  {
+    "prompt_sha256": "7744079c9edf276b4855958d232aff16e93c6623d8d3812a49b8ddcfb209eceb",
+    "diff_sha256": "c75161097e967e006bafe06fa70875179d068062b4f243561bf8c8d34f63b0e3",
+    "response": {
+      "findings": [
+        {
+          "cwe": "CWE-89",
+          "rule_id": "SEC-SQLI",
+          "severity": "high",
+          "title": "SQL injection via f-string in query",
+          "explanation": "The external_id parameter is interpolated directly into the SQL query using an f-string, allowing an attacker to inject arbitrary SQL and read or modify the database.",
+          "path": "validation/2.py",
+          "line": 2,
+          "evidence": "connection.execute(f\"SELECT id FROM users WHERE id = {external_id}\")",
+          "fix": "Use a parameterized query: connection.execute(\"SELECT id FROM users WHERE id = ?\", (external_id,)).fetchall()",
+          "test": "Call lookup(connection, \"1 OR 1=1\") and assert the query does not return all rows; or assert the executed SQL contains a placeholder and external_id is passed as a bound parameter.",
+          "confidence": 0.95
+        }
+      ]
+    }
+  },
+  {
+    "prompt_sha256": "7744079c9edf276b4855958d232aff16e93c6623d8d3812a49b8ddcfb209eceb",
+    "diff_sha256": "771db078208da8ab5189c38395a1bc87eb0b5e3094d526245f342fe4e570503e",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "7744079c9edf276b4855958d232aff16e93c6623d8d3812a49b8ddcfb209eceb",
+    "diff_sha256": "8dd37fcb7cf737ea11f31a8f4f8982e1be785a6c3db39573b17d8b61e6ddd128",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "7744079c9edf276b4855958d232aff16e93c6623d8d3812a49b8ddcfb209eceb",
+    "diff_sha256": "64c88016dd7d725580a9e2754b396576d2233ca0b3fdce5b51258bd49d994164",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "7744079c9edf276b4855958d232aff16e93c6623d8d3812a49b8ddcfb209eceb",
+    "diff_sha256": "84ae0decad3e3d402157256bc84dc252860e06df13bc3ffb9b1dd5a436f43e94",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "0667304ebf65c92bb38d781c82576c61d168f042ba13d9c727b5ad3d87502a1b",
+    "diff_sha256": "f9d5e0fc4c5d831a05f97e806cd4675569743a401bc1afbad547e1e45cfacf7f",
+    "response": {
+      "findings": [
+        {
+          "cwe": "CWE-95",
+          "rule_id": "SEC-EVAL",
+          "severity": "critical",
+          "title": "Arbitrary code execution via eval() on external request data",
+          "explanation": "The added function deserialize_request passes untrusted external request text directly to eval(), which executes arbitrary Python code. An attacker controlling the request payload can run arbitrary commands on the host.",
+          "path": "validation/1.py",
+          "line": 3,
+          "evidence": "return eval(text)",
+          "fix": "Replace eval() with a safe parser such as json.loads() or ast.literal_eval() for trusted literal data, and validate the input schema before use.",
+          "test": "import pytest\nfrom validation import deserialize_request\n\ndef test_deserialize_request_rejects_code_execution():\n    with pytest.raises(Exception):\n        deserialize_request(\"__import__('os').system('id')\")",
+          "confidence": 0.95
+        }
+      ]
+    }
+  },
+  {
+    "prompt_sha256": "0667304ebf65c92bb38d781c82576c61d168f042ba13d9c727b5ad3d87502a1b",
+    "diff_sha256": "c75161097e967e006bafe06fa70875179d068062b4f243561bf8c8d34f63b0e3",
+    "response": {
+      "findings": [
+        {
+          "cwe": "CWE-89",
+          "rule_id": "SEC-SQLI",
+          "severity": "high",
+          "title": "SQL injection via f-string interpolation in lookup()",
+          "explanation": "The added line builds a SQL query by interpolating external_id directly into an f-string passed to connection.execute(). If external_id is attacker-controlled, this allows SQL injection.",
+          "path": "validation/2.py",
+          "line": 2,
+          "evidence": "connection.execute(f\"SELECT id FROM users WHERE id = {external_id}\")",
+          "fix": "Use a parameterized query: connection.execute(\"SELECT id FROM users WHERE id = ?\", (external_id,)).fetchall()",
+          "test": "assert lookup(conn, \"1 OR 1=1\") does not return all rows; assert lookup(conn, \"1; DROP TABLE users;--\") raises or is treated as a literal value",
+          "confidence": 0.95
+        }
+      ]
+    }
+  },
+  {
+    "prompt_sha256": "0667304ebf65c92bb38d781c82576c61d168f042ba13d9c727b5ad3d87502a1b",
+    "diff_sha256": "771db078208da8ab5189c38395a1bc87eb0b5e3094d526245f342fe4e570503e",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "0667304ebf65c92bb38d781c82576c61d168f042ba13d9c727b5ad3d87502a1b",
+    "diff_sha256": "8dd37fcb7cf737ea11f31a8f4f8982e1be785a6c3db39573b17d8b61e6ddd128",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "0667304ebf65c92bb38d781c82576c61d168f042ba13d9c727b5ad3d87502a1b",
+    "diff_sha256": "64c88016dd7d725580a9e2754b396576d2233ca0b3fdce5b51258bd49d994164",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "0667304ebf65c92bb38d781c82576c61d168f042ba13d9c727b5ad3d87502a1b",
+    "diff_sha256": "84ae0decad3e3d402157256bc84dc252860e06df13bc3ffb9b1dd5a436f43e94",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "7744079c9edf276b4855958d232aff16e93c6623d8d3812a49b8ddcfb209eceb",
+    "diff_sha256": "953094e45d30462de0a663cbfe9a3dca3c77bbd7b8aa90317102f5e27f4addee",
+    "response": {
+      "findings": [
+        {
+          "cwe": "CWE-502",
+          "rule_id": "SEC-DESERIALIZE",
+          "severity": "critical",
+          "title": "Unsafe pickle deserialization of untrusted data",
+          "explanation": "The function passes attacker-controlled bytes directly to pickle.loads, which can execute arbitrary code during deserialization.",
+          "path": "holdout/1.py",
+          "line": 3,
+          "evidence": "return pickle.loads(untrusted_bytes)",
+          "fix": "Do not use pickle for untrusted input. Use a safe serialization format such as JSON, or if pickle is required, enforce strict authentication and validation before deserialization.",
+          "test": "Call load_upload with a malicious pickle payload that executes a side effect (e.g., os.system('touch /tmp/pwned')) and assert the side effect does not occur.",
+          "confidence": 0.99
+        }
+      ]
+    }
+  },
+  {
+    "prompt_sha256": "7744079c9edf276b4855958d232aff16e93c6623d8d3812a49b8ddcfb209eceb",
+    "diff_sha256": "a4fece315d9eb7a8971dc4dc950becf83419ab2976ca44c58cef67f2c1d48b3e",
+    "response": {
+      "findings": [
+        {
+          "cwe": "CWE-78",
+          "rule_id": "SEC-CMD-INJECTION",
+          "severity": "high",
+          "title": "Command injection via shell=True with untrusted path",
+          "explanation": "The function concatenates an untrusted path directly into a shell command string and executes it with shell=True. An attacker-controlled value such as '; rm -rf /' or '$(malicious)' will be interpreted by the shell, allowing arbitrary command execution.",
+          "path": "holdout/2.py",
+          "line": 3,
+          "evidence": "return subprocess.run(\"ls \" + untrusted_path, shell=True, capture_output=True)",
+          "fix": "Avoid shell=True and pass arguments as a list: subprocess.run([\"ls\", untrusted_path], capture_output=True). If shell features are required, validate the path against an allowlist and use shlex.quote.",
+          "test": "Call inspect_path(\"; touch /tmp/pwned\") and assert that /tmp/pwned is not created; also assert inspect_path(\"$(id)\") does not execute the substitution.",
+          "confidence": 0.98
+        }
+      ]
+    }
+  },
+  {
+    "prompt_sha256": "7744079c9edf276b4855958d232aff16e93c6623d8d3812a49b8ddcfb209eceb",
+    "diff_sha256": "a4d111b5efcbf5f994c8c5416e6d43760f17cc98ec719af8aa3deacc6d5bcbf0",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "7744079c9edf276b4855958d232aff16e93c6623d8d3812a49b8ddcfb209eceb",
+    "diff_sha256": "4e7de4c2dda752816b4fb92a67f4e5f2ed01f2e67f790a341b3cd09f0ca67249",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "7744079c9edf276b4855958d232aff16e93c6623d8d3812a49b8ddcfb209eceb",
+    "diff_sha256": "7e6c6d08eadc405a828cd1bc5ce8a84bb217c1e690996e006ebe9dc48c55740b",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "7744079c9edf276b4855958d232aff16e93c6623d8d3812a49b8ddcfb209eceb",
+    "diff_sha256": "17a9f58d68ae20db9dfcc197e02d12200c9fcc08c02899a3670e5e48aa157ff0",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "0667304ebf65c92bb38d781c82576c61d168f042ba13d9c727b5ad3d87502a1b",
+    "diff_sha256": "953094e45d30462de0a663cbfe9a3dca3c77bbd7b8aa90317102f5e27f4addee",
+    "response": {
+      "findings": [
+        {
+          "cwe": "CWE-502",
+          "rule_id": "SEC-PICKLE",
+          "severity": "high",
+          "title": "Deserialization of untrusted data via pickle.loads",
+          "explanation": "The added function load_upload directly passes untrusted_bytes to pickle.loads, which can execute arbitrary code during deserialization. This is a classic insecure deserialization sink reachable from untrusted input.",
+          "path": "holdout/1.py",
+          "line": 3,
+          "evidence": "return pickle.loads(untrusted_bytes)",
+          "fix": "Do not use pickle for untrusted data. Replace with a safe serialization format such as JSON, or use a restricted unpickler that only allows explicitly whitelisted safe classes.",
+          "test": "import pytest\nfrom holdout import load_upload\n\ndef test_load_upload_rejects_malicious_pickle():\n    payload = b\"cos\\nsystem\\n(S'id'\\ntR.\"\n    with pytest.raises(Exception):\n        load_upload(payload)",
+          "confidence": 0.95
+        }
+      ]
+    }
+  },
+  {
+    "prompt_sha256": "0667304ebf65c92bb38d781c82576c61d168f042ba13d9c727b5ad3d87502a1b",
+    "diff_sha256": "a4fece315d9eb7a8971dc4dc950becf83419ab2976ca44c58cef67f2c1d48b3e",
+    "response": {
+      "findings": [
+        {
+          "cwe": "CWE-78",
+          "rule_id": "SEC-CMD-INJECTION",
+          "severity": "high",
+          "title": "OS command injection via shell=True with concatenated untrusted path",
+          "explanation": "The added function builds a shell command by concatenating the untrusted_path argument into a string and executes it with shell=True. An attacker-controlled path containing shell metacharacters (e.g. '; rm -rf /') will be interpreted by the shell, allowing arbitrary command execution.",
+          "path": "holdout/2.py",
+          "line": 3,
+          "evidence": "return subprocess.run(\"ls \" + untrusted_path, shell=True, capture_output=True)",
+          "fix": "Avoid shell=True and pass arguments as a list: subprocess.run([\"ls\", untrusted_path], capture_output=True). If shell features are required, use shlex.quote(untrusted_path) and validate the path against an allowlist.",
+          "test": "import subprocess\\nfrom holdout import inspect_path\\n# ensure metacharacters are not interpreted\\nres = inspect_path(\"; touch /tmp/pwned\")\\nassert not os.path.exists(\"/tmp/pwned\")",
+          "confidence": 0.95
+        }
+      ]
+    }
+  },
+  {
+    "prompt_sha256": "0667304ebf65c92bb38d781c82576c61d168f042ba13d9c727b5ad3d87502a1b",
+    "diff_sha256": "a4d111b5efcbf5f994c8c5416e6d43760f17cc98ec719af8aa3deacc6d5bcbf0",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "0667304ebf65c92bb38d781c82576c61d168f042ba13d9c727b5ad3d87502a1b",
+    "diff_sha256": "4e7de4c2dda752816b4fb92a67f4e5f2ed01f2e67f790a341b3cd09f0ca67249",
+    "response": {
+      "findings": []
+    }
+  },
+  {
+    "prompt_sha256": "0667304ebf65c92bb38d781c82576c61d168f042ba13d9c727b5ad3d87502a1b",
+    "diff_sha256": "7e6c6d08eadc405a828cd1bc5ce8a84bb217c1e690996e006ebe9dc48c55740b",
+    "response": {
+      "findings": [
+        {
+          "cwe": "CWE-78",
+          "rule_id": "SEC-CMD-INJECTION",
+          "severity": "low",
+          "title": "Subprocess call uses list form with shell=False, no injection defect",
+          "explanation": "The added line invokes subprocess.run with a list argument and shell=False, so the path value is passed as a distinct argv element rather than interpreted by a shell. No command injection sink is introduced by this added line.",
+          "path": "holdout/5.py",
+          "line": 3,
+          "evidence": "subprocess.run([\"ls\",\"--\",path],shell=False,capture_output=True)",
+          "fix": "No fix required; keep shell=False and list-form arguments.",
+          "test": "assert inspect_path(\"; rm -rf /\").returncode != 0",
+          "confidence": 0.9
+        }
+      ]
+    }
+  },
+  {
+    "prompt_sha256": "0667304ebf65c92bb38d781c82576c61d168f042ba13d9c727b5ad3d87502a1b",
+    "diff_sha256": "17a9f58d68ae20db9dfcc197e02d12200c9fcc08c02899a3670e5e48aa157ff0",
+    "response": {
+      "findings": []
+    }
+  }
+]

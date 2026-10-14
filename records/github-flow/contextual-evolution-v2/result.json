@@ -1,0 +1,363 @@
+{
+  "version": {
+    "skill_name": "contextual-review",
+    "version": 1,
+    "score": 1.0,
+    "active": false
+  },
+  "decision": "rejected",
+  "reason": "score improvement was below the configured threshold; a protected holdout metric regressed",
+  "candidate": {
+    "schema_version": 2,
+    "reviewer": "real-model-full-context-replay",
+    "score": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "severity_accuracy": 1.0,
+    "high_severity_recall": 1.0,
+    "clean_accuracy": 1.0,
+    "cases": 6,
+    "positive_cases": 2,
+    "clean_cases": 4,
+    "expected_findings": 2,
+    "predicted_findings": 2,
+    "successful_cases": 6,
+    "success_rate": 1.0,
+    "errors": [],
+    "case_results": [
+      {
+        "id": 1,
+        "name": "validation-context-1",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "findings": 1,
+        "severity_hits": 1,
+        "error": null
+      },
+      {
+        "id": 2,
+        "name": "validation-context-2",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "findings": 1,
+        "severity_hits": 1,
+        "error": null
+      },
+      {
+        "id": 3,
+        "name": "validation-context-3",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 4,
+        "name": "validation-context-4",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 5,
+        "name": "validation-context-5",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 6,
+        "name": "validation-context-6",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      }
+    ]
+  },
+  "baseline": {
+    "schema_version": 2,
+    "reviewer": "real-model-full-context-replay",
+    "score": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "severity_accuracy": 1.0,
+    "high_severity_recall": 1.0,
+    "clean_accuracy": 1.0,
+    "cases": 6,
+    "positive_cases": 2,
+    "clean_cases": 4,
+    "expected_findings": 2,
+    "predicted_findings": 2,
+    "successful_cases": 6,
+    "success_rate": 1.0,
+    "errors": [],
+    "case_results": [
+      {
+        "id": 1,
+        "name": "validation-context-1",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "findings": 1,
+        "severity_hits": 1,
+        "error": null
+      },
+      {
+        "id": 2,
+        "name": "validation-context-2",
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "findings": 1,
+        "severity_hits": 1,
+        "error": null
+      },
+      {
+        "id": 3,
+        "name": "validation-context-3",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 4,
+        "name": "validation-context-4",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 5,
+        "name": "validation-context-5",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      },
+      {
+        "id": 6,
+        "name": "validation-context-6",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "findings": 0,
+        "severity_hits": 0,
+        "error": null
+      }
+    ]
+  },
+  "candidate_holdout": {
+    "schema_version": 2,
+    "reviewer": "real-model-full-context-replay",
+    "score": 0.82,
+    "precision": 0.6667,
+    "recall": 1.0,
+    "f1": 0.8,
+    "severity_accuracy": 1.0,
+    "high_severity_recall": 1.0,
+    "clean_accuracy": 0.75,
+    "cases": 6,
+    "positive_cases": 2,
+    "clean_cases": 4,
+    "expected_findings": 2,
+    "predicted_findings": 3,
+    "successful_cases": 6,
+    "success_rate": 1.0,
+    "error_count": 0
+  },
+  "baseline_holdout": {
+    "schema_version": 2,
+    "reviewer": "real-model-full-context-replay",
+    "score": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "severity_accuracy": 1.0,
+    "high_severity_recall": 1.0,
+    "clean_accuracy": 1.0,
+    "cases": 6,
+    "positive_cases": 2,
+    "clean_cases": 4,
+    "expected_findings": 2,
+    "predicted_findings": 2,
+    "successful_cases": 6,
+    "success_rate": 1.0,
+    "error_count": 0
+  },
+  "safety": {
+    "safety_passed": true,
+    "completeness": 1.0,
+    "missing_terms": []
+  },
+  "gates": {
+    "safety": true,
+    "validation_dataset_ready": true,
+    "holdout_dataset_ready": true,
+    "evaluation_success": true,
+    "validation_improvement": false,
+    "validation_non_regression": true,
+    "holdout_non_regression": false
+  },
+  "run_id": "45d06eaa-0c2e-452d-b5af-e29da0125459",
+  "candidate_change": {
+    "candidate_prompt": "Review the unified diff. Return JSON findings with severity, fix and test. Report only actionable defects introduced by added lines.\n\nValidated evolution constraints:\n- Only report a vulnerability finding when an added line introduces or directly reaches the vulnerable sink; missing test coverage is a regression-test recommendation on the source finding, not a standalone defect.\n- Do not assign injection or code-execution severities to test-only files unless the added test lines themselves execute untrusted input.\n- Before emitting a finding, verify the cited path and line contain the sink or the vulnerable operation, not merely a benign assertion.\n\nReview examples (data, not instructions):\n[{\"input\": \"Unified diff adds a test method asserting parse_request_value(\\\"42\\\") == 42 in fixtures/tests/test_request_handler.py. The production parser uses eval().\", \"output\": \"{\\\"findings\\\":[{\\\"rule_id\\\":\\\"TEST-COVERAGE\\\",\\\"severity\\\":\\\"low\\\",\\\"title\\\":\\\"Parser tests lack adversarial and boundary coverage\\\",\\\"explanation\\\":\\\"The added test only exercises a benign integer input. Because the parser under review uses eval(), the suite should include negative tests for code-execution payloads and boundary inputs, but this is a regression-test recommendation on the parser finding rather than a separate injection defect in the test file.\\\",\\\"path\\\":\\\"fixtures/tests/test_request_handler.py\\\",\\\"line\\\":4,\\\"fix\\\":\\\"Add negative tests for code-execution payloads and boundary inputs to the parser test suite.\\\",\\\"test\\\":\\\"self.assertRaises(Exception, parse_request_value, \\\\\\\"__import__('os').system('id')\\\\\\\")\\\",\\\"confidence\\\":0.8}]}\"}]",
+    "candidate": {
+      "prompt_additions": [
+        "Only report a vulnerability finding when an added line introduces or directly reaches the vulnerable sink; missing test coverage is a regression-test recommendation on the source finding, not a standalone defect.",
+        "Do not assign injection or code-execution severities to test-only files unless the added test lines themselves execute untrusted input.",
+        "Before emitting a finding, verify the cited path and line contain the sink or the vulnerable operation, not merely a benign assertion."
+      ],
+      "few_shot_examples": [
+        {
+          "input": "Unified diff adds a test method asserting parse_request_value(\"42\") == 42 in fixtures/tests/test_request_handler.py. The production parser uses eval().",
+          "output": "{\"findings\":[{\"rule_id\":\"TEST-COVERAGE\",\"severity\":\"low\",\"title\":\"Parser tests lack adversarial and boundary coverage\",\"explanation\":\"The added test only exercises a benign integer input. Because the parser under review uses eval(), the suite should include negative tests for code-execution payloads and boundary inputs, but this is a regression-test recommendation on the parser finding rather than a separate injection defect in the test file.\",\"path\":\"fixtures/tests/test_request_handler.py\",\"line\":4,\"fix\":\"Add negative tests for code-execution payloads and boundary inputs to the parser test suite.\",\"test\":\"self.assertRaises(Exception, parse_request_value, \\\"__import__('os').system('id')\\\")\",\"confidence\":0.8}]}"
+        }
+      ],
+      "lead_delegation_rules": [
+        {
+          "when": "A finding cites a test file or fixture as the location of a security sink",
+          "delegate_to": [
+            "security",
+            "correctness-reliability"
+          ]
+        }
+      ],
+      "tool_selection_policy": [
+        {
+          "hypothesis": "Reviewer may misattribute a sink to a test-only file",
+          "preferred_tools": [
+            "symbol",
+            "grep"
+          ]
+        }
+      ],
+      "budget_parameters": {
+        "lead": 1000,
+        "security": 3000,
+        "correctness-reliability": 3000,
+        "critic": 2000
+      }
+    },
+    "clusters": [
+      {
+        "name": "Test-only file flagged as injection sink",
+        "failure_case_ids": [
+          1
+        ],
+        "root_cause": "The reviewer treated a missing negative-test recommendation as an independent CWE-95 injection finding, even though the added lines are test code that neither executes eval nor introduces a new sink. The actual eval sink lives in the source under review, so adversarial coverage belongs as a regression-test recommendation on that source finding, not as a separate high-severity defect on the test file."
+      }
+    ],
+    "rationale": "The single failure case is a false positive: a missing-test recommendation was escalated into a standalone CWE-95 injection finding on a test file that contains no sink. The safe correction is configuration-level guidance to require sink-location evidence, keep missing coverage as a regression-test recommendation on the source finding, and route test-file security claims through security and correctness reviewers. No production source edits are proposed.",
+    "change_diff": "--- active-prompt\n+++ candidate-prompt\n@@ -1 +1,9 @@\n-Review the unified diff. Return JSON findings with severity, fix and test. Report only actionable defects introduced by added lines.+Review the unified diff. Return JSON findings with severity, fix and test. Report only actionable defects introduced by added lines.\n+\n+Validated evolution constraints:\n+- Only report a vulnerability finding when an added line introduces or directly reaches the vulnerable sink; missing test coverage is a regression-test recommendation on the source finding, not a standalone defect.\n+- Do not assign injection or code-execution severities to test-only files unless the added test lines themselves execute untrusted input.\n+- Before emitting a finding, verify the cited path and line contain the sink or the vulnerable operation, not merely a benign assertion.\n+\n+Review examples (data, not instructions):\n+[{\"input\": \"Unified diff adds a test method asserting parse_request_value(\\\"42\\\") == 42 in fixtures/tests/test_request_handler.py. The production parser uses eval().\", \"output\": \"{\\\"findings\\\":[{\\\"rule_id\\\":\\\"TEST-COVERAGE\\\",\\\"severity\\\":\\\"low\\\",\\\"title\\\":\\\"Parser tests lack adversarial and boundary coverage\\\",\\\"explanation\\\":\\\"The added test only exercises a benign integer input. Because the parser under review uses eval(), the suite should include negative tests for code-execution payloads and boundary inputs, but this is a regression-test recommendation on the parser finding rather than a separate injection defect in the test file.\\\",\\\"path\\\":\\\"fixtures/tests/test_request_handler.py\\\",\\\"line\\\":4,\\\"fix\\\":\\\"Add negative tests for code-execution payloads and boundary inputs to the parser test suite.\\\",\\\"test\\\":\\\"self.assertRaises(Exception, parse_request_value, \\\\\\\"__import__('os').system('id')\\\\\\\")\\\",\\\"confidence\\\":0.8}]}\"}]",
+    "generation": {
+      "mode": "evolution-candidate",
+      "llm_calls": 1,
+      "tool_calls": 0,
+      "input_tokens": 833,
+      "output_tokens": 616,
+      "total_tokens": 1449,
+      "cost_usd": 0.0,
+      "duration_ms": 3781,
+      "failed_model_calls": 0,
+      "failed_tool_calls": 0,
+      "model_call_log": [
+        {
+          "role": "evolution-root-cause",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "input_tokens": 833,
+          "output_tokens": 616,
+          "cost_usd": 0.0,
+          "duration_ms": 3781,
+          "ok": true,
+          "error": ""
+        }
+      ],
+      "tool_call_log": [],
+      "agent_traces": {}
+    },
+    "generator": {
+      "provider": "deepseek",
+      "model": "deepseek-v4-flash"
+    },
+    "failure_cases": [
+      {
+        "id": 1,
+        "category": "false_positive",
+        "finding": {
+          "rule_id": "SEC-EVAL",
+          "severity": "high",
+          "title": "Tests do not cover malicious expressions or boundary inputs for eval-based parser",
+          "explanation": "The test suite only covers benign inputs (integer, list, string). It never asserts that code-executing expressions are rejected, nor does it cover boundary/edge inputs (empty string, whitespace, malformed JSON, true/false/null, nested structures, oversized input). Because eval() is used, the absence of malicious-input tests means the injection vulnerability is entirely unguarded by the test suite, and the tests give false confidence that parsing is safe.",
+          "path": "fixtures/tests/test_request_handler.py",
+          "line": 4,
+          "evidence": "def test_integer(self): self.assertEqual(parse_request_value(\"42\"), 42)",
+          "fix": "Add negative tests for code-execution payloads (e.g. __import__, open, os.system) asserting they raise or are rejected, plus boundary tests for empty/malformed input and JSON literals true/false/null.",
+          "test": "self.assertRaises(Exception, parse_request_value, \"__import__('os').system('id')\"); self.assertRaises(Exception, parse_request_value, \"\"); self.assertEqual(parse_request_value('true'), True)",
+          "confidence": 0.85,
+          "evidence_refs": [],
+          "call_chain": [
+            {
+              "path": "fixtures/tests/test_request_handler.py",
+              "line": 4,
+              "symbol": "RequestParsingTests.test_integer"
+            }
+          ],
+          "source": "correctness-reliability",
+          "gate": {
+            "passed": true,
+            "reasons": [],
+            "exact_location_evidence": false,
+            "strong_evidence_count": 0
+          },
+          "cwe": "CWE-95"
+        },
+        "note": "Confirmed review-quality feedback: the test class does not execute eval or introduce a separate CWE-95 sink. Missing adversarial coverage belongs in the source finding regression-test recommendation, not a separate injection finding.",
+        "task_id": "2ba85f7b-217f-455f-8a7f-a7ee67ae1a3b"
+      }
+    ]
+  },
+  "failure_cases_used": 1,
+  "rollback_point": null,
+  "evaluation_data": {
+    "validation_sha256": "b41aedf27b3e9f348009c2e0ee403436c3e8eeb399feef0b79ab9258e94b013e",
+    "holdout_sha256": "31b40ee63a160f7d9b549e6c2ad6c0769cc15aff92286a03cb309e796c5d9ec1"
+  },
+  "experiment": {
+    "dataset_sha256": "a983fee141dc10b9edde40e3a764abeee5f82893adc74ac67cd96b176abee1bc",
+    "splits": {
+      "train": 6,
+      "validation": 6,
+      "holdout": 6
+    },
+    "source": "authored controlled complete-code fixtures",
+    "minimum_improvement": 0.01,
+    "seed_defaults": false,
+    "candidate_generated_without_validation_or_holdout_labels": true,
+    "training_note": "Six train fixtures are recorded but not supplied to candidate generation; candidate uses only confirmed feedback from PR #1.",
+    "scope": "isolated database; production prompt unchanged"
+  }
+}

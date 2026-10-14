@@ -1,0 +1,10 @@
+{
+  "baseline_python_expression_result": 2,
+  "patched_tests_passed": true,
+  "full_suite_passed": true,
+  "tests_added": 4,
+  "total_fixture_tests": 10,
+  "regression_test_commit": "da375ebd68f45118985ab4c9a5744c2853644db6",
+  "pr": "https://github.com/YUshire/evoagent-flow-lab/pull/2",
+  "note": "These independent security tests were added after model repair generation; original before/after fixer checks used six ordinary tests."
+}

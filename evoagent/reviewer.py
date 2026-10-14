@@ -247,6 +247,8 @@ class OpenAICompatibleReviewer(Reviewer):
 
     @staticmethod
     def _parse_findings(result: Dict[str, Any], parsed: ParsedDiff) -> List[Finding]:
+        if not isinstance(result.get("findings"), list):
+            raise ValueError("review response must contain a findings array")
         valid_locations = {(item.path, item.line) for item in parsed.added_lines}
         findings: List[Finding] = []
         for raw in result.get("findings", []):
